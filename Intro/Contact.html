@@ -1,0 +1,26 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Contact{{ endblock }}
+
+{{ block content }}
+
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+ <div class="my-box">
+
+This survey is an initial study for a BMBF Funded Future Fields activity, as part of the Excellence Initiative of Karlsruhe Institute of Technology. 
+<br/><br/>
+{{formfield 'contact'}}
+
+<br/>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

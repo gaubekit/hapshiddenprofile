@@ -1,0 +1,26 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Introduction (1/2){{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+ <div class="my-box">
+
+This survey is part of a series as part of a research project funded by BMBF & Karlsruhe Institute of Technology's excellence initiative. 
+<br/> <br/>
+This survey will take 15-20 minutes of your time. 
+<br/><br/>
+Please note that there is only a Next button, but no option to go back to the previous pages. Please click Next only when you are completely finished with each page of the survey. 
+<br/><br/>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

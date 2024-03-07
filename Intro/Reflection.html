@@ -1,0 +1,39 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Reflection{{ endblock }}
+
+{{ block content }}
+
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+ <div class="my-box">
+     
+{{ formfield 'alignGoals' }} <br/><br/>
+
+{{ formfield 'woopUtility' }}<br/><br/>
+
+{{ formfield 'goalSatisfaction' }}<br/><br/>
+
+{{ formfield 'projectChoiceSatisfaction' }}<br/><br/>
+
+{{ formfield 'likeabilityWoop' }}<br/><br/>
+
+<b>Individually:</b>
+{{ formfield 'likelyToUseWoopInd' }}<br/><br/>
+
+<b>In a team setting:</b>
+{{ formfield 'likelyToUseWoopTeam' }}<br/><br/>
+
+{{ formfield 'feedback' }}<br/><br/>
+
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

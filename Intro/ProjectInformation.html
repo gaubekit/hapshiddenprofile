@@ -1,0 +1,52 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Project Information{{ endblock }}
+
+{{ block content }}
+
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+ <div class="my-box">
+
+Now you will be presented with information on three innovation projects. Based on the provided information, you have to choose the best project, in your opinion.<br/><br/>
+
+<b>Project A: Virtual Reality Fitness Adventure Game</b><br/><br/>
+
+Project A is a virtual reality fitness adventure game that combines immersive storytelling with physical exercise. Players embark on epic quests where they must complete fitness challenges to progress, making workouts engaging and rewarding. The project requires a team of 10 members, including VR developers, game designers, fitness trainers, and storytellers. The project would roughly cost €500,000 for VR equipment, game development, and marketing. It would take 12 months for concept development, testing, and launch.<br/> With the rise of VR gaming and fitness trends, a unique fusion of both concepts offers broad appeal to gamers and fitness enthusiasts alike. The game could generate revenue through direct sales, subscription models, in-game purchases, and partnerships with fitness brands.<br/><br/>
+
+<b>Project B: AI-Powered Personalized Shopping Assistant</b><br/><br/>
+
+Project B is an AI-powered shopping assistant that uses machine learning algorithms to analyze user preferences, browsing history, and social media data to provide personalized product recommendations and styling advice. The project needs a team of 8 members, including AI engineers, data scientists, UX/UI designers, and marketing specialists. It would cost €700,000 for AI development, app design, data acquisition, and initial marketing campaigns. It would need 10 months for development, testing, and launch.<br/>
+In an era of online shopping, personalized shopping experiences are highly sought after, making this assistant appealing to consumers seeking convenience and tailored recommendations. Revenue streams could include affiliate marketing, sponsored content, premium subscription tiers, and partnerships with e-commerce platforms.<br/><br/>
+
+<b>Project C: Smart Home Energy Management System</b><br/><br/>
+
+Project C is a smart home energy management system that integrates AI algorithms, IoT sensors, and user behavior analysis to optimize energy usage, reduce costs, and minimize environmental impact. The project would need a team of 12 members, including AI engineers, IoT specialists, software developers, and energy efficiency experts. The project would cost €1 million for RnD, hardware components, software development, and market testing. It would need 18 months for design, development, testing, and deployment.<br/>
+With increasing concerns about energy efficiency and sustainability, a comprehensive smart home energy solution appeals to environmentally conscious homeowners and businesses.Revenue could be generated through product sales, subscription-based services, energy savings partnerships, and government incentives for energy-efficient technologies.
+
+<br/><br/>
+Now decide for one best project, based on the information provided above. Remember, your task is to only choose the best project, but not necessarily work on this project.
+
+{{ formfield 'ProjectChoice' }}
+
+
+In the previous stage you specified your wishes & expectations of an innovation project.
+     
+<br/>
+{{ formfield 'decisiveElementWish' }}<br/>
+{{ formfield 'decisiveElementOutcome' }}<br/>
+{{ formfield 'decisiveElementObstacle'}}<br/>
+{{ formfield 'decisiveElementPlan' }}<br/>
+     
+<br/>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

@@ -1,0 +1,45 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}General Information{{ endblock }}
+
+{{ block content }}
+
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+ <div class="my-box">
+
+Before we get started, we would like to have some preliminary information about you. 
+
+{{ formfield 'gender' }} <br/> <br/>
+
+{{ formfield 'Age' }} <br/> <br/>
+
+{{ formfield 'countryOfResidence' }} <br/> <br/>
+
+{{ formfield 'teamSize' }} <br/> <br/>
+
+{{ formfield 'numEmployees' }} <br/> <br/>
+
+{{ formfield 'decisionMaker' }} <br/> <br/>
+ 
+{{formfield 'frequencyDecisions'}}<br/> <br/>
+
+{{ formfield 'togetherWithColleague' }} <br/> <br/>
+
+{{ formfield 'existingProcess' }} <br/> <br/>
+
+{{ formfield 'satisfactionexistingProcess' }} <br/> <br/>
+
+{{ formfield 'digitalTools' }} <br/> <br/>
+
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

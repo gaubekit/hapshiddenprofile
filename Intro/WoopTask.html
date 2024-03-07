@@ -1,0 +1,39 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}WOOP (Wish-Outcome-Obstacle-Plan) Task{{ endblock }}
+
+{{ block content }}
+
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+ <div class="my-box">
+Now you will perform a popular strategy for goal-setting, called the WOOP Task. For the following questions, you are required to provide atleast one answer. In case of multiple answers, write each new answer on a new line. <br/><br/>
+
+1) Define atleast one <b>wish</b> or goal a project should fulfill, to be selected as an innovation project. There is no right/ wrong wish, but rather about your idea of what an innovation project should fulfill. In this scenario, you are only required to choose an innovation project, but need not work on it later on. <br/><br/>
+
+{{formfield 'Wish'}}
+<br/><br/>
+
+2) Identify one aspect of the <b>outcome</b> you would like to achieve for your organisation during or upon completion of the project.<br/><br/>
+
+{{formfield 'Outcome'}}
+
+3) Imagine you have to choose a project as a team (but not necessarily work on it). Elaborate one <b>obstacle</b> about the defined wish, based on present reality, standing in the way.<br/><br/>
+
+{{formfield 'Obstacle'}}<br/><br/>
+
+4)  Imagine you have to choose a project as a team (but not necessarily work on it). For your obstacle, identify and <b>plan</b> a behavior to overcome it in your negotiation with your team member(s).<br/><br/>
+{{formfield 'Plan'}}
+<br/><br/>
+
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}
