@@ -3,6 +3,7 @@
 
 {{ block content }}
 
+<p><i>This page warns if the user contributes 0 or their explanation is too short.</i></p>
 
 <style>
     .my-box {
@@ -34,6 +35,30 @@
 
 </div>
 <br/>
-{{ next_button }}
+
+<button type="button" class="btn btn-primary" onclick="checkSubmit()">Next</button>
+
+<script>
+    function checkSubmit() {
+        let form = document.getElementById('form');
+        let isValid = form.reportValidity();
+        if (!isValid) return;
+
+        let warnings = [];
+
+        let feedback = forminputs.feedback.value;
+        if (feedback.length < 1) {
+            warnings.push("You give not any feedback.");
+        }
+
+        if (warnings.length > 0) {
+                warnings.push("Press OK to proceed anyway.")
+                let confirmed = window.confirm(warnings.join('\r\n'));
+                if (!confirmed) return;
+            }
+
+        form.submit();
+    }
+</script>
 
 {{ endblock }}
