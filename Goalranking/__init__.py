@@ -21,6 +21,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'Goalranking'
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
+    SEED = random.randint(1, 500)
 
 
 class Subsession(BaseSubsession):
@@ -42,15 +43,17 @@ class Player(BasePlayer):
     fourth_goal_rank = models.IntegerField(label="", min=1, max=5)
 
 # PAGES
-class GoalRanking(Page): #TODO: Learning how to acces values across apps --> use this to split goal selection into this app
+
+# Note: Testpage, excluded TODO: del
+# class GoalRanking(Page):
     # @staticmethod
     # def vars_for_template(player):
     #     key_value = []
-    #     for key, value in player.participant.goal_ranking.items(): # ToDo see this example
+    #     for key, value in player.participant.goal_ranking.items():
     #         key_value.append((key, value))
     #
     #     return dict(test = key_value[0])
-    pass
+    # pass
 
 
 class GoalWeighting(Page):
@@ -75,15 +78,17 @@ class GoalWeighting(Page):
         # separate named and unnamed goals
         goal_list = {goal: count for goal, count in goal_counts.items() if count != 0}
         unnamed_goals = {goal: count for goal, count in goal_counts.items() if count == 0}
-        unnamed_goals = [goal for goal in unnamed_goals]
 
         # chose most mentioned goals
         sorted_goals = sorted(goal_list.items(), key=itemgetter(1), reverse=True)
         chosen_goals = [goal[0] for goal in sorted_goals[:4]]
 
-        # fill up the goals up to four randomly, if there are less than four mentioned
+        unnamed_goals = [goal for goal in unnamed_goals if goal not in chosen_goals]
+
+        # add goals by random, if there are less than 4 mentioned
         if len(chosen_goals) < 4:
             short_come = 4 - len(chosen_goals)
+            random.seed(C.SEED)
             additional_goals = random.sample(unnamed_goals, short_come)
             chosen_goals.extend(additional_goals)
 
@@ -129,4 +134,4 @@ class ResultsWaitPage(WaitPage):
     pass
 
 
-page_sequence = [GoalRanking, GoalWeighting, ResultsWaitPage]
+page_sequence = [GoalWeighting, ResultsWaitPage]

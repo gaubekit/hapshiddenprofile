@@ -57,15 +57,6 @@ class Player(BasePlayer):
     goal7 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
     goal8 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
 
-    # first_goal_name = models.StringField()
-    # first_goal_rank = models.IntegerField(label="", min=1, max=5)
-    # second_goal_name = models.StringField()
-    # second_goal_rank = models.IntegerField(label="", min=1, max=5)
-    # third_goal_name = models.StringField()
-    # third_goal_rank = models.IntegerField(label="", min=1, max=5)
-    # fourth_goal_name = models.StringField()
-    # fourth_goal_rank = models.IntegerField(label="", min=1, max=5)
-
 
 # PAGES
 class ExplainWoopTask(Page):
