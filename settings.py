@@ -1,12 +1,24 @@
 from os import environ
+
 SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fee=0)
-SESSION_CONFIGS = [dict(name='haps_woop', num_demo_participants=20, app_sequence=['Intro'])]
+
+# InterventionA = Control; InterventionB = GoalSetting; InterventionC = GoalSetting + Spidergraph
+SESSION_CONFIGS = [
+    dict(name='Pilot', num_demo_participants=20, app_sequence=['Pilot']),
+    dict(name='InterventionA', num_demo_participants=2, app_sequence=['Intro', 'Woop', 'Goalranking'])#
+    #dict(name='InterventionB', num_demo_participants=4, app_sequence=[]),
+    #dict(name='InterventionC', num_demo_participants=4, app_sequence=[])
+]
+
 LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
+
 DEMO_PAGE_INTRO_HTML = ''
-PARTICIPANT_FIELDS = []
+
+PARTICIPANT_FIELDS = ['goal_list', 'goal_ranking'] #specify the participant variables here
 SESSION_FIELDS = []
+
 ROOMS = [dict(name='Test_session', display_name='Test_session')]
 
 ADMIN_USERNAME = 'admin'

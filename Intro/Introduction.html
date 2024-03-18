@@ -1,0 +1,26 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Introduction (2/2){{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+<ul> 
+<li>Imagine you have to choose an innovation project for your organisation.<br/><br/></li>
+<li>You will now be led through a series of steps, to define goals or wishes from an innovation project.
+<br/><br/></li>
+<li>You will then receive descriptions of 3 innovation projects. Based on the provided information, you will choose the best project out of these 3 projects.<br/><br/></li>
+</ul>
+{{ formfields }}
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}
