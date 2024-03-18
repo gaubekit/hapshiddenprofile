@@ -5,7 +5,7 @@ SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fe
 # InterventionA = Control; InterventionB = GoalSetting; InterventionC = GoalSetting + Spidergraph
 SESSION_CONFIGS = [
     dict(name='Pilot', num_demo_participants=20, app_sequence=['Pilot']),
-    dict(name='InterventionA', num_demo_participants=2, app_sequence=['Intro', 'Woop', 'Goalranking'])#
+    dict(name='InterventionA', num_demo_participants=2, app_sequence=['Woop', 'Goalranking'])  # 'Intro',
     #dict(name='InterventionB', num_demo_participants=4, app_sequence=[]),
     #dict(name='InterventionC', num_demo_participants=4, app_sequence=[])
 ]
