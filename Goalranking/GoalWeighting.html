@@ -44,20 +44,26 @@
                <u><b>Sum</b></u>: <p id="total_value"></p><br>
 
 
-                {{first_goal}}:  <input type="range" name="first_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
+                {{first_goal}}<br>   <input type="range" name="first_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <span id="first_goal_rank_value">1</span>
                 <br><br>
 
-                {{second_goal}}:  <input type="range" name="second_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
+                {{second_goal}}<br>   <input type="range" name="second_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <span id="second_goal_rank_value">1</span>
                 <br><br>
 
-                {{third_goal}}:  <input type="range" name="third_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
+                {{third_goal}}<br>   <input type="range" name="third_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <span id="third_goal_rank_value">1</span>
                 <br><br>
 
-                {{fourth_goal}}:  <input type="range" name="fourth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
+                {{fourth_goal}}<br>  <input type="range" name="fourth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <span id="fourth_goal_rank_value">1</span><br>
+                <br><br>
+
+                {{fifth_goal}}<br>   <input type="range" name="fifth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
+                <span id="fifth_goal_rank_value">1</span><br>
+
+
 
             </td>
             <td>
@@ -100,13 +106,16 @@
             let myRadarChart = new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: [js_vars.first_goal_js, 'Second Goal', 'Third Goal', 'Fourth Goal'],
+                    labels: [js_vars.first_goal_js, 'Second Goal', 'Third Goal', 'Fourth Goal', 'Fifth Goal'],
                     datasets: [{
                         label: 'Goals',
-                        data: [parseInt(document.querySelector('input[name="first_goal_rank"]').value),
+                        data: [
+                               parseInt(document.querySelector('input[name="first_goal_rank"]').value),
                                parseInt(document.querySelector('input[name="second_goal_rank"]').value),
                                parseInt(document.querySelector('input[name="third_goal_rank"]').value),
-                               parseInt(document.querySelector('input[name="fourth_goal_rank"]').value)],
+                               parseInt(document.querySelector('input[name="fourth_goal_rank"]').value),
+                               parseInt(document.querySelector('input[name="fifth_goal_rank"]').value)
+                               ],
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 2
@@ -124,7 +133,7 @@
         }
 
         // Initiales Erstellen des RadarCharts
-        createRadarChart(4); // Hier könntest du auch einen initialen Wert für die Gesamtsumme übergeben
+        createRadarChart(5); // Hier könntest du auch einen initialen Wert für die Gesamtsumme übergeben
     </script>
 
     <br>

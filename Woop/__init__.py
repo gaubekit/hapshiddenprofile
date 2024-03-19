@@ -24,14 +24,13 @@ class C(BaseConstants):
     NUM_ROUNDS = 1
 
     POSSIBLE_CHOICES = [
-        dict(name='goal1', label="Goal1"),
-        dict(name='goal2', label="Goal2"),
-        dict(name='goal3', label="Goal3"),
-        dict(name='goal4', label="Goal4"),
-        dict(name='goal5', label="Goal5"),
-        dict(name='goal6', label="Goal6"),
-        dict(name='goal7', label="Goal7"),
-        dict(name='goal8', label="Goal8"),
+        dict(name='human_resources', label="need of human resources"),
+        dict(name='cost', label="not that expensive"),
+        dict(name='duration', label="short implementation time"),
+        dict(name='revenue', label="generate revenue"),
+        dict(name='new_tech', label="use of new technologie"),
+        dict(name='social_benefits', label="social benefit"),
+        # more goal's (fitting criteria) could be added
     ]
 
 
@@ -44,14 +43,14 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    goal1 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    goal2 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    goal3 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    goal4 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    goal5 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    goal6 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    goal7 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    goal8 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    human_resources = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    cost = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    duration = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    revenue = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    new_tech = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    social_benefits = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    # goal7 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
+    # goal8 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
 
 
 # PAGES
@@ -78,33 +77,33 @@ class WoopTask(Page):
     @staticmethod
     def before_next_page(player: Player, **kwargs):
         # handle None Values
-        if player.field_maybe_none('goal1') is None:
-            player.goal1 = False
-        if player.field_maybe_none('goal2') is None:
-            player.goal2 = False
-        if player.field_maybe_none('goal3') is None:
-            player.goal3 = False
-        if player.field_maybe_none('goal4') is None:
-            player.goal4 = False
-        if player.field_maybe_none('goal5') is None:
-            player.goal5 = False
-        if player.field_maybe_none('goal6') is None:
-            player.goal6 = False
-        if player.field_maybe_none('goal7') is None:
-            player.goal7 = False
-        if player.field_maybe_none('goal8') is None:
-            player.goal8 = False
-
+        if player.field_maybe_none('human_resources') is None:
+            player.human_resources = False
+        if player.field_maybe_none('cost') is None:
+            player.cost = False
+        if player.field_maybe_none('duration') is None:
+            player.duration = False
+        if player.field_maybe_none('revenue') is None:
+            player.revenue = False
+        if player.field_maybe_none('new_tech') is None:
+            player.new_tech = False
+        if player.field_maybe_none('social_benefits') is None:
+            player.social_benefits = False
+        # if player.field_maybe_none('goal7') is None:
+        #     player.goal7 = False
+        # if player.field_maybe_none('goal8') is None:
+        #     player.goal8 = False
 
         # store the goals for the goal weighting in participants field
         participant = player.participant
-        participant.goal_list = {'goal1':  player.goal1, 'goal2':  player.goal2,
-                                 'goal3': player.goal3, 'goal4': player.goal4,
-                                 'goal5':  player.goal5, 'goal6':  player.goal6,
-                                 'goal7':  player.goal7, 'goal8':  player.goal8}
+        participant.goal_list = {'human_resources':  player.human_resources, 'cost':  player.cost,
+                                 'duration': player.duration, 'revenue': player.revenue,
+                                 'new_tech':  player.new_tech, 'social_benefits':  player.social_benefits} #,
+                                  #'goal7':  player.goal7, 'goal8':  player.goal8}
 
 
 class FinishWoop(WaitPage):
    pass
+
 
 page_sequence = [ExplainWoopTask, WoopTask, FinishWoop]

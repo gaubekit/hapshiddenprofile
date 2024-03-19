@@ -41,6 +41,8 @@ class Player(BasePlayer):
     third_goal_rank = models.IntegerField(label="", min=1, max=5)
     fourth_goal_name = models.StringField()
     fourth_goal_rank = models.IntegerField(label="", min=1, max=5)
+    fifth_goal_name = models.StringField()
+    fifth_goal_rank = models.IntegerField(label="", min=1, max=5)
 
 # PAGES
 
@@ -58,16 +60,15 @@ class Player(BasePlayer):
 
 class GoalWeighting(Page):
     form_model = 'player'
-    form_fields = ['first_goal_rank', 'second_goal_rank', 'third_goal_rank', 'fourth_goal_rank']
+    form_fields = ['first_goal_rank', 'second_goal_rank', 'third_goal_rank', 'fourth_goal_rank', 'fifth_goal_rank']
 
     @staticmethod
     def vars_for_template(player):
 
         # setting a goal_count dict for counting goals mentioned
         goal_counts = {
-            'goal1': 0, 'goal2': 0, 'goal3': 0, 'goal4': 0,
-            'goal5': 0, 'goal6': 0, 'goal7': 0, 'goal8': 0
-        }
+            'human_resources': 0, 'cost': 0, 'duration': 0, 'revenue': 0,
+            'new_tech': 0, 'social_benefits': 0} #, 'goal7': 0, 'goal8': 0}
 
         # count how often the goals were mentioned by the participants
         for p in player.subsession.get_players():
@@ -81,13 +82,13 @@ class GoalWeighting(Page):
 
         # chose most mentioned goals
         sorted_goals = sorted(goal_list.items(), key=itemgetter(1), reverse=True)
-        chosen_goals = [goal[0] for goal in sorted_goals[:4]]
+        chosen_goals = [goal[0] for goal in sorted_goals[:5]]
 
         unnamed_goals = [goal for goal in unnamed_goals if goal not in chosen_goals]
 
         # add goals by random, if there are less than 4 mentioned
-        if len(chosen_goals) < 4:
-            short_come = 4 - len(chosen_goals)
+        if len(chosen_goals) < 5:
+            short_come = 5 - len(chosen_goals)
             random.seed(C.SEED)
             additional_goals = random.sample(unnamed_goals, short_come)
             chosen_goals.extend(additional_goals)
@@ -96,11 +97,13 @@ class GoalWeighting(Page):
         player.second_goal_name = chosen_goals[1]
         player.third_goal_name = chosen_goals[2]
         player.fourth_goal_name = chosen_goals[3]
+        player.fifth_goal_name = chosen_goals[4]
 
         return dict(first_goal=chosen_goals[0],
                     second_goal=chosen_goals[1],
                     third_goal=chosen_goals[2],
-                    fourth_goal=chosen_goals[3]
+                    fourth_goal=chosen_goals[3],
+                    fifth_goal=chosen_goals[4]
                     )
 
     @staticmethod
@@ -108,7 +111,8 @@ class GoalWeighting(Page):
         return dict(first_goal_js=player.first_goal_name,
                     second_goal_js=player.second_goal_name,
                     third_goal_js=player.third_goal_name,
-                    fourth_goal_js=player.fourth_goal_name
+                    fourth_goal_js=player.fourth_goal_name,
+                    fifth_goal_js=player.fifth_goal_name
                     )
 
     @staticmethod
@@ -116,9 +120,10 @@ class GoalWeighting(Page):
         num_selected = (values['first_goal_rank']
                         + values['second_goal_rank']
                         + values['third_goal_rank']
-                        + values['fourth_goal_rank'])
-        if num_selected > 15:
-            return "Please make sure that you allocate a maximum of 15 points."
+                        + values['fourth_goal_rank']
+                        + values['fifth_goal_rank'])
+        if num_selected > 18:
+            return "Please make sure that you allocate a maximum of 18 points."
 
     @staticmethod
     def before_next_page(player, timeout_happened):
@@ -126,7 +131,8 @@ class GoalWeighting(Page):
         participant.goal_ranking = {player.first_goal_name:  player.first_goal_rank,
                                     player.second_goal_name:  player.second_goal_rank,
                                     player.third_goal_name:  player.third_goal_rank,
-                                    player.fourth_goal_name:  player.fourth_goal_rank}
+                                    player.fourth_goal_name:  player.fourth_goal_rank,
+                                    player.fifth_goal_name:  player.fifth_goal_rank}
 
 
 class FinishGoalWeighting(WaitPage):
