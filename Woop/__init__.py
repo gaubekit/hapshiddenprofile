@@ -2,11 +2,7 @@
 Notes:
     - WOOP = Wish Outcome Obstacle Plan
     - All players do the WOOP-Task Individual Level
-
-
-    - player need to rank the importance of goals for the spidergraph..
-      ..as part of spidergraph, it should maybe take place in the spidergraph part
-
+      Note: For Wish: Select two out of 8 (at the moment)
 
 is Needed in Version:
     - impactGoalSetting (goal-setting, normal jitsi)

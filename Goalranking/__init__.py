@@ -1,8 +1,8 @@
 """
 Notes:
-    - for the moment just test reasons
     - access goals via participant
-    - weight it
+    - select common goals
+    - weight common goals
 
 is Needed in Version:
     - impactGoalsSharedSetting (goal-setting, jitsi with intervention)
@@ -129,9 +129,8 @@ class GoalWeighting(Page):
                                     player.fourth_goal_name:  player.fourth_goal_rank}
 
 
-
-class ResultsWaitPage(WaitPage):
+class FinishGoalWeighting(WaitPage):
     pass
 
 
-page_sequence = [GoalWeighting, ResultsWaitPage]
+page_sequence = [GoalWeighting, FinishGoalWeighting]
