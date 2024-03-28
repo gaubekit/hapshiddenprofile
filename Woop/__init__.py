@@ -62,6 +62,7 @@ class WoopTask(Page):
 
     @staticmethod
     def get_form_fields(player: Player):
+        #print([wish['name'] for wish in C.POSSIBLE_CHOICES])
         return [wish['name'] for wish in C.POSSIBLE_CHOICES]
 
     @staticmethod

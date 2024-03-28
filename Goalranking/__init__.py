@@ -86,12 +86,15 @@ class GoalWeighting(Page):
 
         unnamed_goals = [goal for goal in unnamed_goals if goal not in chosen_goals]
 
-        # add goals by random, if there are less than 4 mentioned
+        # add goals by random, if there are less than 5 mentioned
         if len(chosen_goals) < 5:
             short_come = 5 - len(chosen_goals)
             random.seed(C.SEED)
             additional_goals = random.sample(unnamed_goals, short_come)
             chosen_goals.extend(additional_goals)
+
+        # save chosen goals in session var
+        player.session.chosen_goals = chosen_goals
 
         player.first_goal_name = chosen_goals[0]
         player.second_goal_name = chosen_goals[1]

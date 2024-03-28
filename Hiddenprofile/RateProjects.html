@@ -1,0 +1,32 @@
+{{ block title }}Project Rating{{ endblock }}
+
+{{ block content }}
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 0;
+        }
+        td {
+            width: calc(100% / 8);
+            border: 0;
+            text-align: center;
+        }
+    </style>
+
+    <table border="1">
+        <tr>
+            {{ for criteria in session.test }}
+            <td><label> {{ criteria.label }} </label></td>
+            {{ endfor }}
+        </tr>
+        <tr>
+            {{ for field in session.test }}
+                <td><input type="checkbox" name="{{ 'field.name' }}" value="1"> </td>
+            {{ endfor }}
+        </tr>
+    </table>
+
+    {{ next_button }}
+
+{{ endblock }}

@@ -58,10 +58,8 @@ class ParticipantData(Page):
     form_model = 'player'
     form_fields = ['age', 'gender']
 
+
 class FinishIntro(WaitPage):
     pass
-
-
-
 
 page_sequence = [PreIntroduction, ParticipantData, FinishIntro]
