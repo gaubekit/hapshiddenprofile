@@ -26,15 +26,19 @@ class C(BaseConstants):
     NUM_ROUNDS = 1
     SEED = random.randint(1, 500)
 
-    INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue', 'new_tech', 'social_benefits']
+    # INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue', 'new_tech', 'social_benefits']
+    #
+    # @staticmethod
+    # def split_information(information_list: list, number_player: int):
+    #     unique_information = random.sample(information_list, number_player) # TODO: Clarify -> should this be random?
+    #     shared_information = [info for info in information_list if info not in unique_information]
+    #     return unique_information, shared_information
+    #
+    # UNIQUE_INFORMATION_KEYS, SHARED_INFORMATION_KEYS = split_information(INFORMATION_KEYS, 2)
 
-    @staticmethod
-    def split_information(information_list: list, number_player: int):
-        unique_information = random.sample(information_list, number_player) # TODO: Clarify -> should this be random?
-        shared_information = [info for info in information_list if info not in unique_information]
-        return unique_information, shared_information
-
-    UNIQUE_INFORMATION_KEYS, SHARED_INFORMATION_KEYS = split_information(INFORMATION_KEYS, 2)
+    # Hardcoded uniqe and shared informations
+    UNIQUE_INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue']
+    SHARED_INFORMATION_KEYS = ['new_tech', 'social_benefits']
 
     # Dictionarios containing information provided in the Page ProjectPitch
     INFORMATION_A = {'human_resources': 'placeholder HUMAN RESOURCES information A',
@@ -71,15 +75,15 @@ class Player(BasePlayer):
     unique_information = models.StringField()
     shared_information = models.StringField()
 
-    individual_project_choice = models.StringField(choices=['Project A', 'Project B', 'Project C'],
-                                                   label='Depending on the Information you have, which project would you choose?')
-
-    ProjectA_human_resources = models.BooleanField(blank=True, initial=False)
-    ProjectA_cost = models.BooleanField(blank=True, initial=False)
-    ProjectA_duration = models.BooleanField(blank=True, initial=False)
-    ProjectA_revenue = models.BooleanField(blank=True, initial=False)
-    ProjectA_new_tech = models.BooleanField(blank=True, initial=False)
-    ProjectA_social_benefits = models.BooleanField(blank=True, initial=False)
+    # individual_project_choice = models.StringField(choices=['Project A', 'Project B', 'Project C'],
+    #                                                label='Depending on the Information you have, which project would you choose?')
+    #
+    # ProjectA_human_resources = models.BooleanField(blank=True, initial=False)
+    # ProjectA_cost = models.BooleanField(blank=True, initial=False)
+    # ProjectA_duration = models.BooleanField(blank=True, initial=False)
+    # ProjectA_revenue = models.BooleanField(blank=True, initial=False)
+    # ProjectA_new_tech = models.BooleanField(blank=True, initial=False)
+    # ProjectA_social_benefits = models.BooleanField(blank=True, initial=False)
     #
     # ProjectB_human_resources
     # ProjectB_cost
@@ -137,39 +141,41 @@ class ProjectPitch(Page):
         player.session.INFORMATION_B = C.INFORMATION_B
         player.session.INFORMATION_C = C.INFORMATION_C
 
-        # store participant variables TODO: Question -> do i need this?
+        # store participant variables which are keys for session variables INFORMATION_A, _B and _C
         player.participant.unique_information = player.unique_information
         player.participant.shared_information = player.shared_information
 
-class RateProjects(Page):
-    form_model = 'player'
-    # form_fields = ['ProjectA_human_resources', 'ProjectA_cost','ProjectA_duration', 'ProjectA_revenue',
-    #                'ProjectA_new_tech', 'ProjectA_social_benefits']
+        # How to use: player.session.INFORMATION_C[player.participant.shared_information]
 
-    @staticmethod
-    def get_form_fields(player: Player):
-        # Lists for checkboxes in Page RateProjects
-        criteria_list_A = [f"ProjectA_{criteria}" for criteria in player.session.chosen_goals]
-        projectA_criteria = [
-            dict(name=criteria_list_A[0], label=f'{criteria_list_A[0]}'),
-            dict(name=criteria_list_A[1], label=f'{criteria_list_A[1]}'),
-            dict(name=criteria_list_A[2], label=f'{criteria_list_A[2]}'),
-            dict(name=criteria_list_A[3], label=f'{criteria_list_A[3]}'),
-            dict(name=criteria_list_A[4], label=f'{criteria_list_A[4]}'),]
-        player.session.test = projectA_criteria
-
-        # Note2me: used the participant field in for loop of the template
-        player.participant.ProjectA_list = [crit['name'] for crit in projectA_criteria]
-        #return player.participant.ProjectA_list
-        return [crit['name'] for crit in projectA_criteria]
-
-    @staticmethod
-    def error_message(player: Player, values):
-        print('values is', values)
-
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        pass
+# class RateProjects(Page):
+#     form_model = 'player'
+#     # form_fields = ['ProjectA_human_resources', 'ProjectA_cost','ProjectA_duration', 'ProjectA_revenue',
+#     #                'ProjectA_new_tech', 'ProjectA_social_benefits']
+#
+#     @staticmethod
+#     def get_form_fields(player: Player):
+#         # Lists for checkboxes in Page RateProjects
+#         criteria_list_A = [f"ProjectA_{criteria}" for criteria in player.session.chosen_goals]
+#         projectA_criteria = [
+#             dict(name=criteria_list_A[0], label=f'{criteria_list_A[0]}'),
+#             dict(name=criteria_list_A[1], label=f'{criteria_list_A[1]}'),
+#             dict(name=criteria_list_A[2], label=f'{criteria_list_A[2]}'),
+#             dict(name=criteria_list_A[3], label=f'{criteria_list_A[3]}'),
+#             dict(name=criteria_list_A[4], label=f'{criteria_list_A[4]}'),]
+#         player.session.test = projectA_criteria
+#
+#         # Note2me: used the participant field in for loop of the template
+#         player.participant.ProjectA_list = [crit['name'] for crit in projectA_criteria]
+#         #return player.participant.ProjectA_list
+#         return [crit['name'] for crit in projectA_criteria]
+#
+#     @staticmethod
+#     def error_message(player: Player, values):
+#         print('values is', values)
+#
+#     @staticmethod
+#     def before_next_page(player, timeout_happened):
+#         pass
 
 
 
@@ -188,4 +194,4 @@ class ResultsWaitPage(WaitPage):
 #     pass
 
 
-page_sequence = [ProjectPitch, RateProjects]
+page_sequence = [ProjectPitch] #, RateProjects]

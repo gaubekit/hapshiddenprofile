@@ -19,16 +19,16 @@ DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = ['goal_list',
                       'goal_ranking',
                       'unique_information',
-                      'shared_information',
-                      'ProjectA_list',
-                      'ProjectV_list',
-                      'ProjectC_list']
+                      'shared_information']#,
+                      # 'ProjectA_list',
+                      # 'ProjectV_list',
+                      # 'ProjectC_list']
 
 SESSION_FIELDS = ['chosen_goals',
                   'INFORMATION_A',
                   'INFORMATION_B',
-                  'INFORMATION_C',
-                  'test']
+                  'INFORMATION_C']#,
+                  # 'test']
 
 ROOMS = [dict(name='Test_session', display_name='Test_session')]
 
