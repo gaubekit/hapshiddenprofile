@@ -7,7 +7,7 @@ SESSION_CONFIGS = [
     dict(name='Pilot', num_demo_participants=20, app_sequence=['Pilot']),
     #dict(name='InterventionA', num_demo_participants=2, app_sequence=[]),
     #dict(name='InterventionB', num_demo_participants=2, app_sequence=[]),
-    dict(name='InterventionC', num_demo_participants=2, app_sequence=['Woop', 'Goalranking', 'Hiddenprofile', 'Projectbygoalindividual']) # 'Intro',
+    dict(name='InterventionC', num_demo_participants=2, app_sequence=['Woop', 'Goalranking', 'Hiddenprofile', 'Projectbygoalindividual', 'MeetingC']) # 'Intro',
 ]
 
 LANGUAGE_CODE = 'en'
@@ -19,16 +19,23 @@ DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = ['goal_list',
                       'goal_ranking',
                       'unique_information',
-                      'shared_information']#,
-                      # 'ProjectA_list',
-                      # 'ProjectV_list',
-                      # 'ProjectC_list']
+                      'shared_information',
+                      'ProjectA_list',
+                      'ProjectB_list',
+                      'ProjectC_list']
 
-SESSION_FIELDS = ['chosen_goals',
+SESSION_FIELDS = ['desc_pro_A',  # String describing Project A
+                  'desc_pro_B',  # String describing Project B
+                  'desc_pro_C',  # String describing Project C
+                  'chosen_goals',
+                  'team_goals',  # used for SpiderGraph during jitsicall
                   'INFORMATION_A',
                   'INFORMATION_B',
-                  'INFORMATION_C']#,
-                  # 'test']
+                  'INFORMATION_C',
+                  'projectA_criteria',
+                  'projectB_criteria',
+                  'projectC_criteria',
+                  'goal_matrix']
 
 ROOMS = [dict(name='Test_session', display_name='Test_session')]
 

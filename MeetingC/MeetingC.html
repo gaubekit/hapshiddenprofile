@@ -1,0 +1,217 @@
+{{ block title }}Virtual Video Call{{ endblock }}
+
+{{ block content }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <!-- split the screen into five boxes. One row with two columns and a second row with three-->
+    <style>
+        /*I don't know exactly what's this about.. but leave it there for now*/
+        * {
+            box-sizing: border-box;
+        }
+
+        /* first row with two columns 60-40 */
+        .upper_row {
+            width: 1200px;
+            padding-right: 10px;
+        }
+        .upper_column {
+            float: left;
+            height: 560px;
+        }
+        .upper_left {
+            width: 60%;
+        }
+        .upper_right {
+            width: 40%;
+            display: flex;
+            align-items: center;
+        }
+        .upper_row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }  /* clear after upper row */
+
+
+
+        /* second row with three columns 45-15-40 */
+        .lower_row {
+            width: 1200px;
+            padding-right: 10px;
+        }
+        .lower_column {
+            float: left;
+            height: 300px;
+        }
+        .lower_left {
+            width: 45%;
+            overflow: auto;
+            padding: 15px;
+        }
+        .lower_center {
+            width: 15%;
+        }
+        .lower_right {
+            width: 40%;
+            vertical-align: middle;
+        }
+        .lower_row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }  /* clear after lower row */
+
+        /* table for project ranking (team) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        td {
+            width: calc(100% / 8);
+            border: 1px solid black;
+            text-align: center;
+        }
+
+    </style>
+
+    <!-- first row (upper_row) -->
+    <div class="upper_row">
+        <!--left box for the jitsy video meeting-->
+        <div class="upper_column upper_left" style="background-color: lightgreen;">
+            PLACEHOLDER VIDEOMEETING
+        </div>
+        <!--right box for the spider graph-->
+        <!-- do i need the id tag below? -->
+        <div id="radarChartContainer" class="upper_column upper_right" style="border: 2px solid green">
+            <canvas id ="myRadarChart"></canvas>
+        </div>
+    </div>
+
+    <!-- second row (lower_row) -->
+    <div class="lower_row">
+         <!--left box for individual Project information-->
+        <div class="lower_column lower_left" style="background-color: lightyellow;">
+            <h2>Recap: Individual Project Information</h2>
+            <br><u><b>Project A: Virtual Reality Fitness Adventure Game</b></u><br>
+            {{session.desc_pro_A}}<br><br>
+            {{unique_a}}<br>
+            {{shared_a}}<br>
+
+            <br><u><b>Project B: AI-Powered Personalized Shopping Assistant</b></u><br>
+            {{session.desc_pro_B}}<br><br>
+            {{unique_b}}<br>
+            {{shared_b}}<br>
+
+            <br><u><b>Project C: Smart Home Energy Management System</b></u><br>
+            {{session.desc_pro_C}}<br><br>
+            {{unique_c}}<br>
+            {{shared_c}}<br>
+        </div>
+         <!--center box for the final choice-->
+        <div class="lower_column lower_center" style="background-color: yellow;">
+            <h2>Final Project Choice</h2> <br><br>
+            should be shown after the project ranking is completed and submitted
+        </div>
+         <!--right box for the Project-Matrix-->
+        <div class="lower_column lower_right" style="background-color: orange;">
+            <h2>Team Rating</h2>
+
+            If there is agreement based on the choices of alle participants the table below shows for each project information which project fits best.
+
+            <!--Table containing the project-matrix-->
+            <table border="1">
+                <tr>
+                    <td> </td>
+                    <td> Project A</td>
+                    <td> Project B</td>
+                    <td> Project C</td>
+                </tr>
+                <tr>
+                    <td> Information1 </td>
+                    <td> A1 </td>
+                    <td> B1 </td>
+                    <td> C1 </td>
+                </tr>
+                 <tr>
+                    <td> Information2 </td>
+                    <td> A2 </td>
+                    <td> B2 </td>
+                    <td> C2 </td>
+                </tr>
+                <tr>
+                    <td> Information3 </td>
+                    <td> test </td>
+                    <td> test </td>
+                    <td> test </td>
+                </tr>
+                <tr>
+                    <td> Information4 </td>
+                    <td> test </td>
+                    <td> test </td>
+                    <td> test </td>
+                </tr>
+                <tr>
+                    <td> Information5 </td>
+                    <td> test </td>
+                    <td> test </td>
+                    <td> test </td>
+                </tr>
+                <tr>
+                    <td> Information6 </td>
+                    <td> test </td>
+                    <td> test </td>
+                    <td> test </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        // function for the radar chart
+        function createRadarChart(total) {
+            let ctx = document.getElementById('myRadarChart').getContext('2d');
+            let myRadarChart = new Chart(ctx, {
+                type: 'radar',
+             data: {
+                    labels: {{session.chosen_goals}},
+                    datasets: [{
+                        label: 'Player2',
+                        data: js_vars.one
+                               ,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Player1',
+                        data: js_vars.two,
+                        backgroundColor: 'rgba(5, 192, 5, 0.2)',
+                        borderColor: 'rgba(5, 192, 5, 1)',
+                        borderWidth: 2
+                    } // TODO: add here datasets for player three and four
+                    ]
+                },
+
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 5
+                        }
+                    }
+                }
+            });
+        }
+
+        // initialize RadaChart aka Spidergraph
+        createRadarChart(5);
+    </script>
+
+{{ next_button }}
+{{ endblock }}

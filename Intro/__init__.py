@@ -58,6 +58,22 @@ class ParticipantData(Page):
     form_model = 'player'
     form_fields = ['age', 'gender']
 
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        """Store Project information as session field"""
+        # TODO: Doppelt, aktuell auch in Goalranking da zu testzwecken Intro deaktiviert
+        player.session.desc_pro_A = 'Project A is a virtual reality fitness adventure game that combines immersive '\
+                                  + 'storytelling with physical exercise.<br>'\
+                                  + 'Players embark on epic quests where they must complete fitness '\
+                                  + 'challenges to progress, making workouts engaging and rewarding.'
+
+        player.session.desc_pro_B = 'Project B is an AI-powered shopping assistant that uses machine learning' \
+                                    + ' algorithms to analyze user preferences, browsing history, and social media' \
+                                    + ' data to provide personalized product recommendations and styling advice.'
+        player.session.desc_pro_C = 'Project C is a smart home energy management system that integrates AI algorithms' \
+                                    + ', IoT sensors, and user behavior analysis to optimize energy usage, ' \
+                                    + 'reduce costs, and minimize environmental impact.'
+
 
 class FinishIntro(WaitPage):
     pass

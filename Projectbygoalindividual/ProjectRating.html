@@ -1,0 +1,44 @@
+{{ block title }}Project Rating{{ endblock }}
+
+{{ block content }}
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        td {
+            width: calc(100% / 8);
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
+
+    We provided you Information depending on the following two goals, weather if its one of your own goals or not.
+    Please decide for each named goal which Projects fits in your opinion best. You have to choose exactly one Project for each goal.
+
+    <table border="1">
+        <tr>
+            <td> </td>
+            <td> Project A</td>
+            <td> Project B</td>
+            <td> Project C</td>
+        </tr>
+        <tr>
+            <td> {{ unique }} </td>
+            <td> <input type="checkbox" name="{{ uniqueA }}" value="1"> </td>
+            <td> <input type="checkbox" name="{{ uniqueB }}" value="1"> </td>
+            <td> <input type="checkbox" name="{{ uniqueC }}" value="1"> </td>
+        </tr>
+         <tr>
+            <td> {{ shared }}</td>
+            <td> <input type="checkbox" name="{{ sharedA }}" value="1"> </td>
+            <td> <input type="checkbox" name="{{ sharedB }}" value="1"> </td>
+            <td> <input type="checkbox" name="{{ sharedC }}" value="1"> </td>
+        </tr>
+    </table>
+
+
+    {{ next_button }}
+
+{{ endblock }}

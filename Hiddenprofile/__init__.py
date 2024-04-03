@@ -39,6 +39,7 @@ class C(BaseConstants):
     # Hardcoded uniqe and shared informations
     UNIQUE_INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue']
     SHARED_INFORMATION_KEYS = ['new_tech', 'social_benefits']
+    GOALS = UNIQUE_INFORMATION_KEYS+SHARED_INFORMATION_KEYS
 
     # Dictionarios containing information provided in the Page ProjectPitch
     INFORMATION_A = {'human_resources': 'placeholder HUMAN RESOURCES information A',
@@ -74,37 +75,6 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     unique_information = models.StringField()
     shared_information = models.StringField()
-
-    # individual_project_choice = models.StringField(choices=['Project A', 'Project B', 'Project C'],
-    #                                                label='Depending on the Information you have, which project would you choose?')
-    #
-    # ProjectA_human_resources = models.BooleanField(blank=True, initial=False)
-    # ProjectA_cost = models.BooleanField(blank=True, initial=False)
-    # ProjectA_duration = models.BooleanField(blank=True, initial=False)
-    # ProjectA_revenue = models.BooleanField(blank=True, initial=False)
-    # ProjectA_new_tech = models.BooleanField(blank=True, initial=False)
-    # ProjectA_social_benefits = models.BooleanField(blank=True, initial=False)
-    #
-    # ProjectB_human_resources
-    # ProjectB_cost
-    # ProjectB_duration
-    # ProjectB_revenue
-    # ProjectB_new_tech
-    # ProjectB_social_benefits
-    #
-    # ProjectC_human_resources
-    # ProjectC_cost
-    # ProjectC_duration
-    # ProjectC_revenue
-    # ProjectC_new_tech
-    # ProjectC_social_benefits
-    #
-    # vars_for_projectrating = [
-    #     'ProjectA_human_resources', 'ProjectA_cost', 'PojectA_duration', 'PojectA_revenue', 'ProjectA_new_tech', 'ProjectA_social_benefits',
-    #     'ProjectB_human_resources', 'ProjectB_cost', 'PojectC_duration', 'PojectC_revenue', 'ProjectC_new_tech','ProjectC_social_benefits',
-    #     'ProjectC_human_resources', 'ProjectC_cost', 'PojectV_duration', 'PojectV_revenue', 'ProjectV_new_tech', 'ProjectV_social_benefits'
-    # ]
-
 
 
 # PAGES
@@ -142,42 +112,66 @@ class ProjectPitch(Page):
         player.session.INFORMATION_C = C.INFORMATION_C
 
         # store participant variables which are keys for session variables INFORMATION_A, _B and _C
+        # TODO add further comments to make clear where and why this is needed
         player.participant.unique_information = player.unique_information
         player.participant.shared_information = player.shared_information
+        # Note -> How to use: player.session.INFORMATION_C[player.participant.shared_information]
 
-        # How to use: player.session.INFORMATION_C[player.participant.shared_information]
+        # shared and unique player informatione
+        information = [player.unique_information, player.shared_information]
 
-# class RateProjects(Page):
-#     form_model = 'player'
-#     # form_fields = ['ProjectA_human_resources', 'ProjectA_cost','ProjectA_duration', 'ProjectA_revenue',
-#     #                'ProjectA_new_tech', 'ProjectA_social_benefits']
-#
-#     @staticmethod
-#     def get_form_fields(player: Player):
-#         # Lists for checkboxes in Page RateProjects
-#         criteria_list_A = [f"ProjectA_{criteria}" for criteria in player.session.chosen_goals]
-#         projectA_criteria = [
-#             dict(name=criteria_list_A[0], label=f'{criteria_list_A[0]}'),
-#             dict(name=criteria_list_A[1], label=f'{criteria_list_A[1]}'),
-#             dict(name=criteria_list_A[2], label=f'{criteria_list_A[2]}'),
-#             dict(name=criteria_list_A[3], label=f'{criteria_list_A[3]}'),
-#             dict(name=criteria_list_A[4], label=f'{criteria_list_A[4]}'),]
-#         player.session.test = projectA_criteria
-#
-#         # Note2me: used the participant field in for loop of the template
-#         player.participant.ProjectA_list = [crit['name'] for crit in projectA_criteria]
-#         #return player.participant.ProjectA_list
-#         return [crit['name'] for crit in projectA_criteria]
-#
-#     @staticmethod
-#     def error_message(player: Player, values):
-#         print('values is', values)
-#
-#     @staticmethod
-#     def before_next_page(player, timeout_happened):
-#         pass
+        # Dictionarys withe names and labels for the formfields in ProjectRating, stored in session
+        criteria_list_A = [f"ProjectA_{criteria}" for criteria in C.GOALS]
+        projectA_criteria = [
+            dict(name=f'{criteria_list_A[0]}', label=f'{criteria_list_A[0]}'),
+            dict(name=f'{criteria_list_A[1]}', label=f'{criteria_list_A[1]}'),
+            dict(name=f'{criteria_list_A[2]}', label=f'{criteria_list_A[2]}'),
+            dict(name=f'{criteria_list_A[3]}', label=f'{criteria_list_A[3]}'),
+            dict(name=f'{criteria_list_A[4]}', label=f'{criteria_list_A[4]}'),
+            dict(name=f'{criteria_list_A[5]}', label=f'{criteria_list_A[5]}'),]
 
+        # store the dictionary as projectA_criteria in session fields
+        player.session.projectA_criteria = projectA_criteria
+        # store a list of shared and unique- information names of the player
+        player.participant.ProjectA_list = [crit for crit in criteria_list_A if crit[9:] in information]
+        print('information: ', player.participant.ProjectA_list)
 
+        # repeat for B
+        # criteria_list_B = [f"ProjectB_{criteria}" for criteria in player.session.chosen_goals]
+        criteria_list_B = [f"ProjectB_{criteria}" for criteria in C.GOALS]
+        projectB_criteria = [
+            dict(name=f'{criteria_list_B[0]}', label=f'{criteria_list_B[0]}'),
+            dict(name=f'{criteria_list_B[1]}', label=f'{criteria_list_B[1]}'),
+            dict(name=f'{criteria_list_B[2]}', label=f'{criteria_list_B[2]}'),
+            dict(name=f'{criteria_list_B[3]}', label=f'{criteria_list_B[3]}'),
+            dict(name=f'{criteria_list_B[4]}', label=f'{criteria_list_B[4]}'),
+            dict(name=f'{criteria_list_B[5]}', label=f'{criteria_list_B[5]}'),]
+
+        player.session.projectB_criteria = projectB_criteria
+        player.participant.ProjectB_list = [crit for crit in criteria_list_B if crit[9:] in information]
+
+        # repeat for C
+        criteria_list_C = [f"ProjectC_{criteria}" for criteria in C.GOALS]
+        projectC_criteria = [
+            dict(name=f'{criteria_list_C[0]}', label=f'{criteria_list_C[0]}'),
+            dict(name=f'{criteria_list_C[1]}', label=f'{criteria_list_C[1]}'),
+            dict(name=f'{criteria_list_C[2]}', label=f'{criteria_list_C[2]}'),
+            dict(name=f'{criteria_list_C[3]}', label=f'{criteria_list_C[3]}'),
+            dict(name=f'{criteria_list_C[4]}', label=f'{criteria_list_C[4]}'),
+            dict(name=f'{criteria_list_C[5]}', label=f'{criteria_list_C[5]}'),]
+
+        player.session.projectC_criteria = projectC_criteria
+        player.participant.ProjectC_list = [crit for crit in criteria_list_C if crit[9:] in information]
+
+        # initialize goal matrix as session variable, is in downstream apps needed for the combined goal matrix
+        player.session.goal_matrix = [
+            ['human_resources', 0, 0, 0],
+            ['cost', 0, 0, 0],
+            ['duration', 0, 0, 0],
+            ['revenue', 0, 0, 0],
+            ['new_tech', 0, 0, 0],
+            ['social_benefits', 0, 0, 0]
+        ]
 
 
 
@@ -188,10 +182,7 @@ class ProjectPitch(Page):
 
 class ResultsWaitPage(WaitPage):
      pass
-#
-#
-# class Results(Page):
-#     pass
 
 
-page_sequence = [ProjectPitch] #, RateProjects]
+
+page_sequence = [ProjectPitch]
