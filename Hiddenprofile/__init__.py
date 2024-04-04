@@ -117,7 +117,7 @@ class ProjectPitch(Page):
         player.participant.shared_information = player.shared_information
         # Note -> How to use: player.session.INFORMATION_C[player.participant.shared_information]
 
-        # shared and unique player informatione
+        # shared and unique player information
         information = [player.unique_information, player.shared_information]
 
         # Dictionarys withe names and labels for the formfields in ProjectRating, stored in session

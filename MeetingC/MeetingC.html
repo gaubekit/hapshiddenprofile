@@ -1,9 +1,12 @@
 {{ block title }}Virtual Video Call{{ endblock }}
 
 {{ block content }}
+    <!-- load library for RadarChart-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <!-- load library for jitsi Meeting-->
+    <script src="https://meet.jit.si/external_api.js"></script>
 
-    <!-- split the screen into five boxes. One row with two columns and a second row with three-->
+    <!-- split the screen into five boxes by using two rows. The first row with two columns and a second row with three-->
     <style>
         /*I don't know exactly what's this about.. but leave it there for now*/
         * {
@@ -13,17 +16,16 @@
         /* first row with two columns 60-40 */
         .upper_row {
             width: 1200px;
-            padding-right: 10px;
         }
         .upper_column {
             float: left;
-            height: 560px;
+            height: 479px;
         }
         .upper_left {
-            width: 60%;
+            width: 70%;
         }
         .upper_right {
-            width: 40%;
+            width: 30%;
             display: flex;
             align-items: center;
         }
@@ -38,23 +40,25 @@
         /* second row with three columns 45-15-40 */
         .lower_row {
             width: 1200px;
-            padding-right: 10px;
         }
         .lower_column {
             float: left;
-            height: 300px;
+            height: 330px;
         }
         .lower_left {
             width: 45%;
             overflow: auto;
-            padding: 15px;
+            padding: 10px;
         }
         .lower_center {
             width: 15%;
+            padding: 10px;
+            text-align: center;
         }
         .lower_right {
             width: 40%;
             vertical-align: middle;
+            padding: 10px;
         }
         .lower_row:after {
             content: "";
@@ -73,14 +77,13 @@
             border: 1px solid black;
             text-align: center;
         }
-
     </style>
 
-    <!-- first row (upper_row) -->
+    <!-- show the container and related content of the first row (upper_row) on the page -->
     <div class="upper_row">
         <!--left box for the jitsy video meeting-->
         <div class="upper_column upper_left" style="background-color: lightgreen;">
-            PLACEHOLDER VIDEOMEETING
+            <!-- <div id=meet></div>  --> Videomeeting, is working :)
         </div>
         <!--right box for the spider graph-->
         <!-- do i need the id tag below? -->
@@ -89,7 +92,7 @@
         </div>
     </div>
 
-    <!-- second row (lower_row) -->
+    <!-- show the container and related content of the second row (lower_row) on the page-->
     <div class="lower_row">
          <!--left box for individual Project information-->
         <div class="lower_column lower_left" style="background-color: lightyellow;">
@@ -111,14 +114,21 @@
         </div>
          <!--center box for the final choice-->
         <div class="lower_column lower_center" style="background-color: yellow;">
-            <h2>Final Project Choice</h2> <br><br>
-            should be shown after the project ranking is completed and submitted
+            <h2>Team Choice</h2> <br><br>
+            <input type="checkbox" id="choice_A" onclick="handleCheckbox(this)"> <b> Project A</b><br><br>
+
+            <input type="checkbox" id="choice_B" onclick="handleCheckbox(this)"> <b> Project B</b><br><br>
+
+            <input type="checkbox" id="choice_C" onclick="handleCheckbox(this)"> <b> Project C</b><br><br>
+
+            <button type="button" class="btn btn-primary" onclick="sendAgreement()">I agree</button>
+
         </div>
          <!--right box for the Project-Matrix-->
         <div class="lower_column lower_right" style="background-color: orange;">
             <h2>Team Rating</h2>
 
-            If there is agreement based on the choices of alle participants the table below shows for each project information which project fits best.
+            If there is agreement based on the choices of alle participants the table below shows for each project information which project fits best. TODO: MAKE IT STATIC
 
             <!--Table containing the project-matrix-->
             <table border="1">
@@ -169,9 +179,78 @@
         </div>
     </div>
 
+    <!-- Script for Team Choice -->
+    <script>
+        // function to handle the checkboxes
+        function handleCheckbox(clickedCheckbox) {
+            const checkboxes = ["choice_A", "choice_B", "choice_C"];
+            // make sure, that there is just one checkbox selected
+            checkboxes.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            // send checkbox information zu otree
+            if (clickedCheckbox.id === "choice_A") {
+                liveSend({'information': 'choice_A_selected'});
+            } else if (clickedCheckbox.id === "choice_B") {
+                liveSend({'information': 'choice_B_selected'});
+            } else if (clickedCheckbox.id === "choice_C") {
+                liveSend({'information': 'choice_C_selected'});
+            }
+        }
 
+        // function to update the checkboxes for the other players, called in liveRecv
+        function liveUpdateCheckbox(new_setup) {
+            const [choiceA, choiceB, choiceC] = new_setup;
+            document.getElementById("choice_A").checked = choiceA;
+            document.getElementById("choice_B").checked = choiceB;
+            document.getElementById("choice_C").checked = choiceC;
+        }
 
+        // Agreement button: send information to oTree if player1 agrees
+        {% if player.id_in_group == 1 %}
+            function sendAgreement() {
+                liveSend({'information': 'p1_agreed'});
+            }
+       // Agreement button: send information to oTree if player2 agrees
+        {% elif player.id_in_group == 2 %}
+            function sendAgreement() {
+                liveSend({'information': 'p2_agreed'});
+            }
+         // TODO: add player 3 and 4
+        {% endif%}
 
+        // TODO
+        function liveRecv(data) {
+            // Make sure that the next button is just displayed, if there is agreement
+            if (data.finished) {
+                document.getElementById("display_next_button").style.display = "block";
+            }
+            if (data.finished == false) {
+                document.getElementById("display_next_button").style.display = "none";
+            }
+
+            // update checkboxes
+            if  (data.checkbox_update == "choice_A_selected") {
+                liveUpdateCheckbox([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B_selected") {
+                liveUpdateCheckbox([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C_selected") {
+                liveUpdateCheckbox([false, false, true]);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+
+            liveSend({});
+        });
+
+    </script>
+
+    <!-- Script for Radar Chart -->
     <script>
         // function for the radar chart
         function createRadarChart(total) {
@@ -213,5 +292,81 @@
         createRadarChart(5);
     </script>
 
-{{ next_button }}
+    <!--Script for Jitsi Meeting -->
+    <!-- Version from 2024-04-03 Anuja's Weakest Link Game -->
+    <script>
+        const domain = "meet.jit.si"; //Here goes your domain where the meeting takes place.
+        var isStreamOn = false; //This is a variable I've defined to use later.
+        const options = {
+            roomName: "Weakest Link Game", //This is the name of the room.
+            width: 840,                //Well, you know.
+            height: 480,                //Same as above, just vertical.
+            parentNode: document.querySelector('#meet'), //Now, you declare here which element should parent your stream.
+            configOverwrite: {}, //You can turn on or off config elements with this prop.
+            interfaceConfigOverwrite: { TOOLBAR_BUTTONS: [] },  //You can turn on or off interface elements with this prop. check https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe for details
+            jwt: 'yourtokenhere' //Here, you should pass a JWT token for authorization purposes. If you're using jitsi-token-moderation or simiar, make sure the token you pass can start streams
+        }
+        const api = new JitsiMeetExternalAPI(domain, options); //This is where the iframe is actually constructed
+        //The function below turns on the Tile View everytime a participant joins. Practically it makes Tile View the default mode
+        api.addEventListener(`videoConferenceJoined`, () => {
+            const listener = ({ enabled }) => {
+                api.removeEventListener(`tileViewChanged`, listener);
+
+                if (!enabled) {
+                    api.executeCommand(`toggleTileView`);
+                }
+            };
+        });
+
+
+
+        function streamHandler() {
+            try {
+                if (!isStreamOn) {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Starting streaming...";
+                    //The function below starts the stream or recording, according to its "mode"
+                    api.executeCommand('startRecording', {
+                        mode: 'stream', //recording mode, either `file` or `stream`.
+                        rtmpStreamKey: '', //This where you *should* put your favoured rtmp stream server along with your key, like "rtmp:\/\/some.address/norecord/stream-key"
+                        youtubeStreamKey: 'rtmp:\/\/some.address/norecord/stream-key', //the youtube stream key.
+                    });
+                } else {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Stopping streaming...";
+                    //The function below stops the stream or recording, according to the string you pass. Official guide shows an object, while it should be a string
+                    api.executeCommand('stopRecording', 'stream');
+                }
+
+            }
+            catch (e){
+                if (isStreamOn){
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while stopping stream.";
+                    console.log("Exception while stopping stream.", e);
+                }else{
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while starting stream.";
+                    console.log("Exception while starting stream.", e);
+
+                }
+                this.isStreamOn = false;
+             }
+        };
+            //This part doesn't work without making some changes to the code as per this; https://github.com/team-ai-repo/jitsi-meet/pull/4/files
+            api.addEventListener("recordingStarted", () => {
+                document.getElementById("stream-btn").innerHTML="Stop Streaming";
+                document.getElementById("streamingResponseMsg").innerHTML = "Stream is on";
+                this.isStreamOn = true;
+                console.log("Example Stream On", this.isStreamOn);
+            });
+
+            api.addEventListener("recordingStopped", () => {
+            document.getElementById("stream-btn").innerHTML="Start Streaming";
+            document.getElementById("streamingResponseMsg").innerHTML = "Stream is off";
+            console.log("Example Stream Off", this.isStreamOn);
+            this.isStreamOn = false;
+        });
+
+
+    </script>
+
+    <br>
+    <div id="display_next_button" style="display: none">{{ next_button }}</div>
 {{ endblock }}
