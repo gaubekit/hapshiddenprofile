@@ -22,7 +22,8 @@ PARTICIPANT_FIELDS = ['goal_list',
                       'shared_information',
                       'ProjectA_list',
                       'ProjectB_list',
-                      'ProjectC_list']
+                      'ProjectC_list'
+                      ]
 
 SESSION_FIELDS = ['desc_pro_A',  # String describing Project A
                   'desc_pro_B',  # String describing Project B
@@ -35,7 +36,10 @@ SESSION_FIELDS = ['desc_pro_A',  # String describing Project A
                   'projectA_criteria',
                   'projectB_criteria',
                   'projectC_criteria',
-                  'goal_matrix']
+                  'goal_matrix',
+                  'checkboxes',  # used to keep track of checkboxes in Meeting
+                  'agreements'  # used to keep track of agreements in Meeting
+                  ]
 
 ROOMS = [dict(name='Test_session', display_name='Test_session')]
 

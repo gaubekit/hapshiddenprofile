@@ -75,6 +75,15 @@
             border: 1px solid black;
             text-align: center;
         }
+
+        #display_lock_button {
+            background-color: orange;
+        }
+
+        #agree_button {
+            background-color: green;
+        }
+
     </style>
 
     <!-- show the container and related content of the first row (upper_row) on the page -->
@@ -112,18 +121,18 @@
         </div>
          <!--center box for the final choice-->
         <div id="final_choice"  class="lower_column lower_center" style="background-color: yellow; display: block">
-            <h2>Team Choice</h2> <br><br>
+            <h2>Team Choice</h2> <br>
             <input type="checkbox" id="choice_A" onclick="handleCheckbox(this)"> <b> Project A</b><br><br>
 
             <input type="checkbox" id="choice_B" onclick="handleCheckbox(this)"> <b> Project B</b><br><br>
 
             <input type="checkbox" id="choice_C" onclick="handleCheckbox(this)"> <b> Project C</b><br><br>
 
-            <button type="button" class="btn btn-primary" onclick="sendAgreement()">I agree</button><br>
-            <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none" >lock choice</button>
+            <button id="agree_button" type="button" class="btn btn-primary" onclick="sendAgreement()" style="display: inline-block; float: left">I agree</button>
+            <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: right" >lock in</button>
         </div>
         <div id="final_choice_done"  class="lower_column lower_center" style="background-color: red; display: none">
-            <p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
+            <br><br><p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
         </div>
          <!--right box for the Project-Matrix-->
         <div class="lower_column lower_right" style="background-color: orange;">
@@ -239,10 +248,12 @@
         function liveRecv(data) {
             // Make sure that the next lock in button is just displayed, if there is agreement
             if (data.finished) {
-                document.getElementById("display_lock_button").style.display = "block";
+                document.getElementById("display_lock_button").style.display = "inline-block";
+                document.getElementById("agree_button").style.display = "none";
             }
             if (data.finished == false) {
                 document.getElementById("display_lock_button").style.display = "none";
+                document.getElementById("agree_button").style.display = "inline-block";
             }
 
             // update checkboxes
