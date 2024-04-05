@@ -7,6 +7,7 @@
     <script src="https://meet.jit.si/external_api.js"></script>
 
     <!-- split the screen into five boxes by using two rows. The first row with two columns and a second row with three-->
+    <!-- TODO: rename/refactor upper_column etc. for more clarity-->
     <style>
         /*I don't know exactly what's this about.. but leave it there for now*/
         * {
@@ -192,10 +193,8 @@
     <br>
 
     <!-- Show the next button only when there is agreement -->
-    <!-- <button id="display_next_button"  class="otree-btn-next btn btn-primary" onclick="next_adjusted" style="display: none" >Next test</button> -->
-    <!-- TODO: Logic to make sure that there could no more changes if one player presses the button -->
     <div id="display_next_button" style="display: none"> {{ next_button }} </div>
-    <!-- onclick="next_adjusted" type="button" -->
+    <!-- <button id="display_next_button"  class="otree-btn-next btn btn-primary" onclick="next_adjusted()" style="display: none" >Next test</button> -->
 
     <!-- Script for Team Choice -->
     <script>

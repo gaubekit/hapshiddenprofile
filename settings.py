@@ -6,7 +6,7 @@ SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fe
 SESSION_CONFIGS = [
     dict(name='Pilot', num_demo_participants=20, app_sequence=['Pilot']),
     #dict(name='InterventionA', num_demo_participants=2, app_sequence=[]),
-    dict(name='InterventionB', num_demo_participants=2, app_sequence=['Premeeting', 'Intro']),
+    #dict(name='InterventionB', num_demo_participants=2, app_sequence=['Premeeting', 'Intro']),
     dict(name='InterventionC', num_demo_participants=2, app_sequence=['Woop', 'Goalranking', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC']) # 'Intro',
 ]
 
@@ -22,14 +22,14 @@ PARTICIPANT_FIELDS = ['goal_list',
                       'shared_information',
                       'ProjectA_list',
                       'ProjectB_list',
-                      'ProjectC_list'
+                      'ProjectC_list',
                       ]
 
 SESSION_FIELDS = ['desc_pro_A',  # String describing Project A
                   'desc_pro_B',  # String describing Project B
                   'desc_pro_C',  # String describing Project C
                   'chosen_goals',
-                  'team_goals',  # used for SpiderGraph during jitsicall
+                  'team_goals',  # used for SpiderGraph during jitsi call
                   'INFORMATION_A',
                   'INFORMATION_B',
                   'INFORMATION_C',
@@ -37,8 +37,10 @@ SESSION_FIELDS = ['desc_pro_A',  # String describing Project A
                   'projectB_criteria',
                   'projectC_criteria',
                   'goal_matrix',
+                  'team_goal_matrix',  # deep copy of goal_matrix for manipulation
                   'checkboxes',  # used to keep track of checkboxes in Meeting
-                  'agreements'  # used to keep track of agreements in Meeting
+                  'agreements',  # used to keep track of agreements in Meeting
+                  'goals_string'  # save the pre-agreed goals
                   ]
 
 ROOMS = [dict(name='Test_session', display_name='Test_session')]

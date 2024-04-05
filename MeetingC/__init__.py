@@ -59,7 +59,7 @@ class MeetingC(Page):
         #print(player.session.goal_matrix)
         # TODO: Logic is needed to provide the prefilled matrix
 
-        # use this section to initialize agreements and checkboxes for live methode
+        # use this section to reset agreements and initialize choice checkboxes for live methode
         player.session.agreements = [False, False]  # Booleans for agreement p1, p2, p3 and p4 TODO: [False, False, False, False]
         player.session.checkboxes = [False, False, False]  # Booleans for checkboxes choice_A, choice_B and choice_c
 

@@ -15,6 +15,7 @@ is Needed in Version:
 
 
 from otree.api import *
+import copy
 
 
 doc = """
@@ -153,9 +154,8 @@ class ProjectRating(Page):
         player.session.goal_matrix[5][2] += player.ProjectB_social_benefits
         player.session.goal_matrix[5][3] += player.ProjectC_social_benefits
 
-
-
-
+        # deep copy for manipulation
+        player.session.team_goal_matrix = copy.deepcopy(player.session.goal_matrix)
 
 
 class ResultsWaitPage(WaitPage):
