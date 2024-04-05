@@ -35,8 +35,6 @@
             clear: both;
         }  /* clear after upper row */
 
-
-
         /* second row with three columns 45-15-40 */
         .lower_row {
             width: 1200px;
@@ -113,7 +111,7 @@
             {{shared_c}}<br>
         </div>
          <!--center box for the final choice-->
-        <div class="lower_column lower_center" style="background-color: yellow;">
+        <div id="final_choice"  class="lower_column lower_center" style="background-color: yellow; display: block">
             <h2>Team Choice</h2> <br><br>
             <input type="checkbox" id="choice_A" onclick="handleCheckbox(this)"> <b> Project A</b><br><br>
 
@@ -121,8 +119,11 @@
 
             <input type="checkbox" id="choice_C" onclick="handleCheckbox(this)"> <b> Project C</b><br><br>
 
-            <button type="button" class="btn btn-primary" onclick="sendAgreement()">I agree</button>
-
+            <button type="button" class="btn btn-primary" onclick="sendAgreement()">I agree</button><br>
+            <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none" >lock choice</button>
+        </div>
+        <div id="final_choice_done"  class="lower_column lower_center" style="background-color: red; display: none">
+            <p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
         </div>
          <!--right box for the Project-Matrix-->
         <div class="lower_column lower_right" style="background-color: orange;">
@@ -179,6 +180,14 @@
         </div>
     </div>
 
+    <br>
+
+    <!-- Show the next button only when there is agreement -->
+    <!-- <button id="display_next_button"  class="otree-btn-next btn btn-primary" onclick="next_adjusted" style="display: none" >Next test</button> -->
+    <!-- TODO: Logic to make sure that there could no more changes if one player presses the button -->
+    <div id="display_next_button" style="display: none"> {{ next_button }} </div>
+    <!-- onclick="next_adjusted" type="button" -->
+
     <!-- Script for Team Choice -->
     <script>
         // function to handle the checkboxes
@@ -221,14 +230,19 @@
          // TODO: add player 3 and 4
         {% endif%}
 
-        // TODO
+        // hiding the choice field if one of the players click on next
+        function lock_in() {
+            liveSend({'information': 'locked'});
+        }
+
+        // function receives Information from oTrees Python part
         function liveRecv(data) {
-            // Make sure that the next button is just displayed, if there is agreement
+            // Make sure that the next lock in button is just displayed, if there is agreement
             if (data.finished) {
-                document.getElementById("display_next_button").style.display = "block";
+                document.getElementById("display_lock_button").style.display = "block";
             }
             if (data.finished == false) {
-                document.getElementById("display_next_button").style.display = "none";
+                document.getElementById("display_lock_button").style.display = "none";
             }
 
             // update checkboxes
@@ -240,6 +254,13 @@
             }
             if  (data.checkbox_update == "choice_C_selected") {
                 liveUpdateCheckbox([false, false, true]);
+            }
+
+            // hide checkboxes and show next button for all players if locked button is clicked by any player
+            if (data.locked == true) {
+                document.getElementById("final_choice_done").style.display = "block";
+                document.getElementById("final_choice").style.display = "none";
+                document.getElementById("display_next_button").style.display = "block";
             }
         }
 
@@ -367,6 +388,4 @@
 
     </script>
 
-    <br>
-    <div id="display_next_button" style="display: none">{{ next_button }}</div>
 {{ endblock }}

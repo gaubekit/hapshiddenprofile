@@ -21,12 +21,18 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+    offer_accepted = models.BooleanField()
 
 
 # PAGES
 class MyPage(Page):
-    pass
+    form_model = 'player'
+    form_fields = ['offer_accepted']
+
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        for p in player.get_others_in_group():
+            p.offer_accepted = True
 
 
 class ResultsWaitPage(WaitPage):
@@ -37,4 +43,4 @@ class Results(Page):
     pass
 
 
-page_sequence = [MyPage, ResultsWaitPage, Results]
+page_sequence = [MyPage, ]
