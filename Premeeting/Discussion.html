@@ -47,6 +47,7 @@
 
         .bottom-right-subcontainer {
             height: 20%;
+            padding: 40px;
         }
 
         table {
@@ -60,6 +61,13 @@
             text-align: center;
         }
 
+        #display_lock_button {
+            background-color: orange;
+        }
+
+        #agree_button {
+            background-color: green;
+        }
     </style>
 
 
@@ -67,9 +75,9 @@
 
         <div class="left-container">
             <div class="top-left-subcontainer"style="background-color: green;">
-                <p> PLACEHOLDER JITSI. </p>
+               <!--<div id=meet></div>  -->  Videomeeting, is working :)
             </div>
-            <div class="bottom-left-subcontainer" style="background-color: lightgreen;">
+            <div id="choice" class="bottom-left-subcontainer" style="background-color: lightgreen;">
                 <h2>Project-Goal Matrix</h2>
                 Based on your previous Rankings: {{session.goals_string}}<br>
                 Please complete the Matrix below:
@@ -83,43 +91,46 @@
                         <td> Project C</td>
                     </tr>
                     <tr>
-                        <td> Information1 </td>
+                        <td> {{Information1}} </td>
                         <td><input type="checkbox" id="A1" onclick="handleCheckboxInf1(this)"></td>
                         <td><input type="checkbox" id="B1" onclick="handleCheckboxInf1(this)"></td>
                         <td><input type="checkbox" id="C1" onclick="handleCheckboxInf1(this)"></td>
                     </tr>
                      <tr>
-                        <td> Information2 </td>
+                        <td> {{Information2}} </td>
                         <td><input type="checkbox" id="A2" onclick="handleCheckboxInf2(this)"></td>
                         <td><input type="checkbox" id="B2" onclick="handleCheckboxInf2(this)"></td>
                         <td><input type="checkbox" id="C2" onclick="handleCheckboxInf2(this)"></td>
                     </tr>
                     <tr>
-                        <td> Information3 </td>
+                        <td> {{Information3}} </td>
                         <td><input type="checkbox" id="A3" onclick="handleCheckboxInf3(this)"></td>
                         <td><input type="checkbox" id="B3" onclick="handleCheckboxInf3(this)"></td>
                         <td><input type="checkbox" id="C3" onclick="handleCheckboxInf3(this)"></td>
                     </tr>
                     <tr>
-                        <td> Information4 </td>
+                        <td> {{Information4}} </td>
                         <td><input type="checkbox" id="A4" onclick="handleCheckboxInf4(this)"></td>
                         <td><input type="checkbox" id="B4" onclick="handleCheckboxInf4(this)"></td>
                         <td><input type="checkbox" id="C4" onclick="handleCheckboxInf4(this)"></td>
                     </tr>
                     <tr>
-                        <td> Information5 </td>
+                        <td> {{Information5}} </td>
                         <td><input type="checkbox" id="A5" onclick="handleCheckboxInf5(this)"></td>
                         <td><input type="checkbox" id="B5" onclick="handleCheckboxInf5(this)"></td>
                         <td><input type="checkbox" id="C5" onclick="handleCheckboxInf5(this)"></td>
                     </tr>
                     <tr>
-                        <td> Information6 </td>
+                        <td> {{Information6}} </td>
                         <td><input type="checkbox" id="A6" onclick="handleCheckboxInf6(this)"></td>
                         <td><input type="checkbox" id="B6" onclick="handleCheckboxInf6(this)"></td>
                         <td><input type="checkbox" id="C6" onclick="handleCheckboxInf6(this)"></td>
                     </tr>
                 </table>
             </div>
+            <div id="choice_done"  class="lower_column lower_center" style="background-color: red; display: none">
+            <br><br><p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
+        </div>
         </div>
 
         <div class="right-container">
@@ -143,18 +154,27 @@
             </div>
 
             <div class="bottom-right-subcontainer"style="background-color: lightyellow;">
-                <p> PLACEHOLDER AGREEMENT</p>
+                <h>Agreement to Project choice</h>
+                <p>
+                    By clicking the Agree-Button you confirm that your
+
+                    <button id="agree_button" type="button" class="btn btn-primary" onclick="sendAgreement()" style="display: inline-block; float: left">I agree</button>
+                    <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: right" >lock in</button>
+                    <br>total agreements to the actual setup: <span id="display_agree_count"></span>
+                </p>
             </div>
         </div>
 
     </div>
 
     <br>
-    {{ next_button }}
+    <!-- Show the next button only when there is agreement -->
+    <div id="display_next_button" style="display: none"> {{ next_button }} </div>
 
 
     <!-- Script for Team Choice -->
     <script>
+
         // functions to handle the checkboxes
         // INFORMATION 1
         function handleCheckboxInf1(clickedCheckbox) {
@@ -304,8 +324,31 @@
         }
 
 
+        // Agreement button: send information to oTree if player1 agrees
+        {% if player.id_in_group == 1 %}
+            function sendAgreement() {
+                liveSend({'information': 'p1_agreed'});
+            }
+       // Agreement button: send information to oTree if player2 agrees
+        {% elif player.id_in_group == 2 %}
+            function sendAgreement() {
+                liveSend({'information': 'p2_agreed'});
+            }
+         // TODO: add player 3 and 4
+        {% endif%}
+
+        // hiding the choice field if one of the players click on next
+        function lock_in() {
+            liveSend({'information': 'locked'});
+        }
+
+
         // function receives Information from oTrees Python part
         function liveRecv(data) {
+            // update agree_count
+            const upd_agreement = data.agreed;
+            document.getElementById("display_agree_count").textContent = upd_agreement;
+
             // update checkboxes
             // INFORMATION 1
             if  (data.checkbox_update == "choice_A1_selected") {
@@ -367,12 +410,101 @@
             if  (data.checkbox_update == "choice_C6_selected") {
                 liveUpdateCheckboxInf6([false, false, true]);
             }
+
+            // Make sure that the lock in button is just displayed, if there is agreement
+            if (data.finished) { //old: data.finished
+                document.getElementById("display_lock_button").style.display = "inline-block";
+                document.getElementById("agree_button").style.display = "none";
+            }
+            if (data.finished == false) { //old: (data.finished == false); new:data.agreed != "2"
+                document.getElementById("display_lock_button").style.display = "none";
+                document.getElementById("agree_button").style.display = "inline-block";
+            }
+            // hide checkboxes and show next button for all players if locked button is clicked by any player
+            if (data.locked == true) {
+                document.getElementById("choice_done").style.display = "block";
+                document.getElementById("choice").style.display = "none";
+                document.getElementById("display_next_button").style.display = "block";
+            }
+
+
         }
+    </script>
 
-        document.addEventListener('DOMContentLoaded', (event) => {
 
-            liveSend({});
+    <!--Script for Jitsi Meeting -->
+    <!-- Version from 2024-04-03 Anuja's Weakest Link Game -->
+    <script>
+        const domain = "meet.jit.si"; //Here goes your domain where the meeting takes place.
+        var isStreamOn = false; //This is a variable I've defined to use later.
+        const options = {
+            roomName: "Weakest Link Game", //This is the name of the room.
+            width: 840,                //Well, you know.
+            height: 480,                //Same as above, just vertical.
+            parentNode: document.querySelector('#meet'), //Now, you declare here which element should parent your stream.
+            configOverwrite: {}, //You can turn on or off config elements with this prop.
+            interfaceConfigOverwrite: { TOOLBAR_BUTTONS: [] },  //You can turn on or off interface elements with this prop. check https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe for details
+            jwt: 'yourtokenhere' //Here, you should pass a JWT token for authorization purposes. If you're using jitsi-token-moderation or simiar, make sure the token you pass can start streams
+        }
+        const api = new JitsiMeetExternalAPI(domain, options); //This is where the iframe is actually constructed
+        //The function below turns on the Tile View everytime a participant joins. Practically it makes Tile View the default mode
+        api.addEventListener(`videoConferenceJoined`, () => {
+            const listener = ({ enabled }) => {
+                api.removeEventListener(`tileViewChanged`, listener);
+
+                if (!enabled) {
+                    api.executeCommand(`toggleTileView`);
+                }
+            };
         });
+
+
+
+        function streamHandler() {
+            try {
+                if (!isStreamOn) {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Starting streaming...";
+                    //The function below starts the stream or recording, according to its "mode"
+                    api.executeCommand('startRecording', {
+                        mode: 'stream', //recording mode, either `file` or `stream`.
+                        rtmpStreamKey: '', //This where you *should* put your favoured rtmp stream server along with your key, like "rtmp:\/\/some.address/norecord/stream-key"
+                        youtubeStreamKey: 'rtmp:\/\/some.address/norecord/stream-key', //the youtube stream key.
+                    });
+                } else {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Stopping streaming...";
+                    //The function below stops the stream or recording, according to the string you pass. Official guide shows an object, while it should be a string
+                    api.executeCommand('stopRecording', 'stream');
+                }
+
+            }
+            catch (e){
+                if (isStreamOn){
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while stopping stream.";
+                    console.log("Exception while stopping stream.", e);
+                }else{
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while starting stream.";
+                    console.log("Exception while starting stream.", e);
+
+                }
+                this.isStreamOn = false;
+             }
+        };
+            //This part doesn't work without making some changes to the code as per this; https://github.com/team-ai-repo/jitsi-meet/pull/4/files
+            api.addEventListener("recordingStarted", () => {
+                document.getElementById("stream-btn").innerHTML="Stop Streaming";
+                document.getElementById("streamingResponseMsg").innerHTML = "Stream is on";
+                this.isStreamOn = true;
+                console.log("Example Stream On", this.isStreamOn);
+            });
+
+            api.addEventListener("recordingStopped", () => {
+            document.getElementById("stream-btn").innerHTML="Start Streaming";
+            document.getElementById("streamingResponseMsg").innerHTML = "Stream is off";
+            console.log("Example Stream Off", this.isStreamOn);
+            this.isStreamOn = false;
+        });
+
+
     </script>
 
 {{ endblock }}

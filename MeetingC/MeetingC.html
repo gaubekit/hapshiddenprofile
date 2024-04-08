@@ -139,6 +139,7 @@
         <div class="lower_column lower_right" style="background-color: orange;">
             <h2>Team Rating</h2>
 
+            TODO: UPDATE
             If there is agreement based on the choices of alle participants the table below shows for each project information which project fits best. TODO: MAKE IT STATIC
 
             <!--Table containing the project-matrix-->
@@ -150,40 +151,40 @@
                     <td> Project C</td>
                 </tr>
                 <tr>
-                    <td> Information1 </td>
-                    <td> A1 </td>
-                    <td> B1 </td>
-                    <td> C1 </td>
+                    <td> {{Information1}} </td>
+                    <td> {{A1}} </td>
+                    <td> {{B1}} </td>
+                    <td> {{C1}} </td>
                 </tr>
                  <tr>
-                    <td> Information2 </td>
-                    <td> A2 </td>
-                    <td> B2 </td>
-                    <td> C2 </td>
+                    <td> {{Information2}} </td>
+                    <td> {{A2}} </td>
+                    <td> {{B2}} </td>
+                    <td> {{C2}} </td>
                 </tr>
                 <tr>
-                    <td> Information3 </td>
-                    <td> test </td>
-                    <td> test </td>
-                    <td> test </td>
+                    <td> {{Information3}} </td>
+                    <td> {{A3}} </td>
+                    <td> {{B3}} </td>
+                    <td> {{C3}} </td>
                 </tr>
                 <tr>
-                    <td> Information4 </td>
-                    <td> test </td>
-                    <td> test </td>
-                    <td> test </td>
+                    <td> {{Information4}} </td>
+                    <td> {{A4}} </td>
+                    <td> {{B4}} </td>
+                    <td> {{C4}} </td>
                 </tr>
                 <tr>
-                    <td> Information5 </td>
-                    <td> test </td>
-                    <td> test </td>
-                    <td> test </td>
+                    <td> {{Information5}} </td>
+                    <td> {{A5}} </td>
+                    <td> {{B5}} </td>
+                    <td> {{C5}} </td>
                 </tr>
                 <tr>
-                    <td> Information6 </td>
-                    <td> test </td>
-                    <td> test </td>
-                    <td> test </td>
+                    <td> {{Information6}} </td>
+                    <td> {{A6}} </td>
+                    <td> {{B6}} </td>
+                    <td> {{C6}} </td>
                 </tr>
 
             </table>
@@ -245,7 +246,7 @@
 
         // function receives Information from oTrees Python part
         function liveRecv(data) {
-            // Make sure that the next lock in button is just displayed, if there is agreement
+            // Make sure that the lock in button is just displayed, if there is agreement
             if (data.finished) {
                 document.getElementById("display_lock_button").style.display = "inline-block";
                 document.getElementById("agree_button").style.display = "none";
@@ -273,11 +274,11 @@
                 document.getElementById("display_next_button").style.display = "block";
             }
         }
-
-        document.addEventListener('DOMContentLoaded', (event) => {
-
-            liveSend({});
-        });
+        // when page loaded send nothing.. but could be used if some indiviudal reloads the page to set something
+        //document.addEventListener('DOMContentLoaded', (event) => {
+        //
+        //    liveSend({});
+        //});
 
     </script>
 

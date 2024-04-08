@@ -63,8 +63,32 @@ class MeetingC(Page):
         player.session.agreements = [False, False]  # Booleans for agreement p1, p2, p3 and p4 TODO: [False, False, False, False]
         player.session.checkboxes = [False, False, False]  # Booleans for checkboxes choice_A, choice_B and choice_c
 
-
-        return dict(  # individual project information as strings
+        return dict(  # Project Information
+                    Information1=player.session.team_goal_matrix[0][0],
+                    A1=player.session.team_goal_matrix[0][1],
+                    B1=player.session.team_goal_matrix[0][2],
+                    C1=player.session.team_goal_matrix[0][3],
+                    Information2=player.session.team_goal_matrix[1][0],
+                    A2=player.session.team_goal_matrix[1][1],
+                    B2=player.session.team_goal_matrix[1][2],
+                    C2=player.session.team_goal_matrix[1][3],
+                    Information3=player.session.team_goal_matrix[2][0],
+                    A3=player.session.team_goal_matrix[2][1],
+                    B3=player.session.team_goal_matrix[2][2],
+                    C3=player.session.team_goal_matrix[2][3],
+                    Information4=player.session.team_goal_matrix[3][0],
+                    A4=player.session.team_goal_matrix[3][1],
+                    B4=player.session.team_goal_matrix[3][2],
+                    C4=player.session.team_goal_matrix[3][3],
+                    Information5=player.session.team_goal_matrix[4][0],
+                    A5=player.session.team_goal_matrix[4][1],
+                    B5=player.session.team_goal_matrix[4][2],
+                    C5=player.session.team_goal_matrix[4][3],
+                    Information6=player.session.team_goal_matrix[5][0],
+                    A6=player.session.team_goal_matrix[5][1],
+                    B6=player.session.team_goal_matrix[5][2],
+                    C6=player.session.team_goal_matrix[5][3],
+                      # individual project information as strings
                     unique_a=player.session.INFORMATION_A[player.participant.unique_information],
                     shared_a=player.session.INFORMATION_A[player.participant.shared_information],
                     unique_b=player.session.INFORMATION_B[player.participant.unique_information],

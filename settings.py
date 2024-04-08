@@ -40,7 +40,8 @@ SESSION_FIELDS = ['desc_pro_A',  # String describing Project A
                   'team_goal_matrix',  # deep copy of goal_matrix for manipulation
                   'checkboxes',  # used to keep track of checkboxes in Meeting
                   'agreements',  # used to keep track of agreements in Meeting
-                  'goals_string'  # save the pre-agreed goals
+                  'goals_string',  # save the pre-agreed goals
+                  'agree_count'  # count how many players has actually agreed
                   ]
 
 ROOMS = [dict(name='Test_session', display_name='Test_session')]
