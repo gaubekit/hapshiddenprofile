@@ -1,26 +1,41 @@
 {{ extends 'global/Page.html' }}
-{{ block title }}Introduction (1/2){{ endblock }}
+{{ block title }}General Infromation{{ endblock }}
 
 {{ block content }}
 
-<style>
-    .my-box {
-        border: 1px solid #ccc;
-        padding: 10px;
-        background-color: #f9f9f9;
-    }
-</style>
+    <style>
+        .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
 
- <div class="my-box">
+    <div class="my-box">
+        This survey is part of a series as part of a research project funded by BMBF & Karlsruhe Institute of Technology's excellence initiative.
+        <br/> <br/>
+        Depending on the group performance the Experiment will take 40-60 minutes || TODO !Prüfen
+        <br/> <br/>
+        During the experiment you will interact with three other Participants. At certain points you have to wait for the others.
+        <br/><br/>
+        Please note that there is only a Next button, but no option to go back to the previous pages. Please click Next only when you are completely finished with each page.D
+        In the parts with video meetings the Next button is only displayed once all participants have agreed to the actual subject for discussion.
+        <br/><br/>
+    </div>
+    <br/>
 
-This survey is part of a series as part of a research project funded by BMBF & Karlsruhe Institute of Technology's excellence initiative. 
-<br/> <br/>
-This survey will take 15-20 minutes of your time. 
-<br/><br/>
-Please note that there is only a Next button, but no option to go back to the previous pages. Please click Next only when you are completely finished with each page of the survey. 
-<br/><br/>
-</div>
-<br/>
+    <div class="my-box">
+        TODO !inform about audio recording and TODO !whatever else is necessary.<br>
+        QUESTION !to which points have the participants agree to?<br>
+        <br><br>
+        Condition 1<br>
+        Button 1<br>
+        <br><br>
+        Condition 2<br>
+        Button 2<br>
+    </div>
+
+<br><br>TODO !show next button only if there have agreed to all points<br>
 {{ next_button }}
 
 {{ endblock }}

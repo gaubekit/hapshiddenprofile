@@ -26,11 +26,11 @@
         }
 
         .top-left-subcontainer {
-            height: 60%;
+            height: 550%;
         }
 
         .bottom-left-subcontainer {
-            height: 40%;
+            height: 540%;
             padding: 10px;
         }
 
@@ -40,14 +40,14 @@
         }
 
         .top-right-subcontainer {
-        height: 80%;
+        height: 65%;
         overflow: auto;
         padding: 10px;
         }
 
         .bottom-right-subcontainer {
-            height: 20%;
-            padding: 40px;
+            height: 35%;
+            padding: 10px;
         }
 
         table {
@@ -75,7 +75,7 @@
 
         <div class="left-container">
             <div class="top-left-subcontainer"style="background-color: green;">
-               <!--<div id=meet></div>  -->  Videomeeting, is working :)
+               <div id=meet></div>  <!-- Videomeeting, is working :) -->
             </div>
             <div id="choice" class="bottom-left-subcontainer" style="background-color: lightgreen;">
                 <h2>Project-Goal Matrix</h2>
@@ -128,7 +128,7 @@
                     </tr>
                 </table>
             </div>
-            <div id="choice_done"  class="lower_column lower_center" style="background-color: red; display: none">
+            <div id="choice_done"  class="bottom-left-subcontainer" style="background-color: red; display: none">
             <br><br><p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
         </div>
         </div>
@@ -154,13 +154,14 @@
             </div>
 
             <div class="bottom-right-subcontainer"style="background-color: lightyellow;">
-                <h>Agreement to Project choice</h>
+                <h2>Agreement to Project choice</h2>
                 <p>
-                    By clicking the Agree-Button you confirm that your
+                    Do you agree with the current goal-matrix set up?<br><br>
 
                     <button id="agree_button" type="button" class="btn btn-primary" onclick="sendAgreement()" style="display: inline-block; float: left">I agree</button>
-                    <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: right" >lock in</button>
-                    <br>total agreements to the actual setup: <span id="display_agree_count"></span>
+
+                    <br><br>Agreements to current setup: <span id="display_agree_count"></span>
+                    <br><br><button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: left" >lock in</button>
                 </p>
             </div>
         </div>

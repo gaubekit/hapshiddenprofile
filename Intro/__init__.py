@@ -49,10 +49,12 @@ class Player(BasePlayer):
 
 # PAGES
 class PreIntroduction(Page):
-    form_model = 'player'
+    pass  # TODO maybe something necessary to handle the agreements
 
-class Introduction(Page): # TODO: not includet in page_sequence yet
-    form_model = 'player'
+
+class Introduction(Page):
+    pass
+
 
 class ParticipantData(Page):
     form_model = 'player'
@@ -61,7 +63,7 @@ class ParticipantData(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         """Store Project information as session field"""
-        # TODO: Doppelt, aktuell auch in Goalranking da zu testzwecken Intro deaktiviert
+        # TODO: Doppelt, aktuell auch in old_Goalranking da zu testzwecken Intro deaktiviert
         player.session.desc_pro_A = 'Project A is a virtual reality fitness adventure game that combines immersive '\
                                   + 'storytelling with physical exercise.<br>'\
                                   + 'Players embark on epic quests where they must complete fitness '\
@@ -78,4 +80,6 @@ class ParticipantData(Page):
 class FinishIntro(WaitPage):
     pass
 
-page_sequence = [PreIntroduction, ParticipantData, FinishIntro]
+
+page_sequence = [PreIntroduction]
+# page_sequence = [PreIntroduction, Introduction, ParticipantData, FinishIntro]

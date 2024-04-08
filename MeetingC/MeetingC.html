@@ -91,7 +91,7 @@
     <div class="upper_row">
         <!--left box for the jitsy video meeting-->
         <div class="upper_column upper_left" style="background-color: lightgreen;">
-            <!-- <div id=meet></div>  --> Videomeeting, is working :)
+            <div id=meet></div> <!--  Videomeeting, is working :) -->
         </div>
         <!--right box for the spider graph-->
         <!-- do i need the id tag below? -->
@@ -131,6 +131,7 @@
 
             <button id="agree_button" type="button" class="btn btn-primary" onclick="sendAgreement()" style="display: inline-block; float: left">I agree</button>
             <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: right" >lock in</button>
+            <br><br>Agreements: <span id="display_agree_count"></span>
         </div>
         <div id="final_choice_done"  class="lower_column lower_center" style="background-color: red; display: none">
             <br><br><p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
@@ -138,9 +139,7 @@
          <!--right box for the Project-Matrix-->
         <div class="lower_column lower_right" style="background-color: orange;">
             <h2>Team Rating</h2>
-
-            TODO: UPDATE
-            If there is agreement based on the choices of alle participants the table below shows for each project information which project fits best. TODO: MAKE IT STATIC
+            The Table below shows your previous decision: TODO visualization
 
             <!--Table containing the project-matrix-->
             <table border="1">
@@ -246,6 +245,9 @@
 
         // function receives Information from oTrees Python part
         function liveRecv(data) {
+            const upd_agreement = data.agreed;
+            document.getElementById("display_agree_count").textContent = upd_agreement;
+
             // Make sure that the lock in button is just displayed, if there is agreement
             if (data.finished) {
                 document.getElementById("display_lock_button").style.display = "inline-block";

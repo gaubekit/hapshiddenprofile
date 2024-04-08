@@ -13,6 +13,18 @@
 
 
     {{ next_button }}
+
+    // supress the input of f5 so the participants couldn't refresh the page
+    <script>
+        document.addEventListener('keydown', event => {
+            if (event.key === 'F5') {
+                event.preventDefault();
+                console.log('F5-Taste wurde blockiert.');
+            }
+        });
+    </script>
+
+
 {{ endblock }}
 
 

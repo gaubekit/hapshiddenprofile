@@ -111,23 +111,11 @@ class Discussion(Page):
 
     @staticmethod
     def live_method(player, data):
-        # just needed uf eventlistner is active
-        # try:
-        #     data['information']
-        # except KeyError:
-        #     print('no inputs are made yet')
-        #     return
-
-        print(f"input for player {player.id_in_group}: ", data['information'])
-        print("team_goal_matrix: ", player.session.team_goal_matrix)
-
-        # for i in range(0, 6):
-        # TODO -> NOTE: Ich glaube ich kann das nicht im loop durchlaufen
-        # Information1
+        # print(f"input for player {player.id_in_group}: ", data['information'])
+        # print("team_goal_matrix: ", player.session.team_goal_matrix)
 
         if data['information'] == f'choice_A{1}_selected':
             player.session.team_goal_matrix[0][1:] = [True, False, False]
-            print(f'update {player.session.team_goal_matrix[0]} to {player.session.team_goal_matrix[0][1:]}')
         if data['information'] == f'choice_B{1}_selected':
             player.session.team_goal_matrix[0][1:] = [False, True, False]
         if data['information'] == f'choice_C{1}_selected':
@@ -135,9 +123,9 @@ class Discussion(Page):
 
         # Information2
         if data['information'] == f'choice_A{2}_selected':
-            print(f'update {player.session.team_goal_matrix[1]} to ')
+            # print(f'update {player.session.team_goal_matrix[1]} to ')
             player.session.team_goal_matrix[1][1:] = [True, False, False]
-            print(f'{player.session.team_goal_matrix[1][1:]}')
+            # print(f'{player.session.team_goal_matrix[1][1:]}')
         if data['information'] == f'choice_B{2}_selected':
             player.session.team_goal_matrix[1][1:] = [False, True, False]
         if data['information'] == f'choice_C{2}_selected':
@@ -146,7 +134,6 @@ class Discussion(Page):
         # Information3
         if data['information'] == f'choice_A{3}_selected':
             player.session.team_goal_matrix[2][1:] = [True, False, False]
-            print(f'update {player.session.team_goal_matrix[2]} to {player.session.team_goal_matrix[2][1:]}')
         if data['information'] == f'choice_B{3}_selected':
             player.session.team_goal_matrix[2][1:] = [False, True, False]
         if data['information'] == f'choice_C{3}_selected':
@@ -155,7 +142,6 @@ class Discussion(Page):
         # Information4
         if data['information'] == f'choice_A{4}_selected':
             player.session.team_goal_matrix[3][1:] = [True, False, False]
-            print(f'update {player.session.team_goal_matrix[3]} to {player.session.team_goal_matrix[3][1:]}')
         if data['information'] == f'choice_B{4}_selected':
             player.session.team_goal_matrix[3][1:] = [False, True, False]
         if data['information'] == f'choice_C{4}_selected':
@@ -164,7 +150,6 @@ class Discussion(Page):
         # Information5
         if data['information'] == f'choice_A{5}_selected':
             player.session.team_goal_matrix[4][1:] = [True, False, False]
-            print(f'update {player.session.team_goal_matrix[4]} to {player.session.team_goal_matrix[4][1:]}')
         if data['information'] == f'choice_B{5}_selected':
             player.session.team_goal_matrix[4][1:] = [False, True, False]
         if data['information'] == f'choice_C{5}_selected':
@@ -173,7 +158,6 @@ class Discussion(Page):
         # Information6
         if data['information'] == f'choice_A{6}_selected':
             player.session.team_goal_matrix[5][1:] = [True, False, False]
-            print(f'update {player.session.team_goal_matrix[5]} to {player.session.team_goal_matrix[5][1:]}')
         if data['information'] == f'choice_B{6}_selected':
             player.session.team_goal_matrix[5][1:] = [False, True, False]
         if data['information'] == f'choice_C{6}_selected':
@@ -194,12 +178,7 @@ class Discussion(Page):
             # return {0: dict(checkbox_update=data['information'], agreed=player.session.agree_count)}
             return {0: dict(checkbox_update=data['information'], finished=False, agreed=player.session.agree_count)}
 
-
-        # DONE handle box changes
-        # TODO handle agreement button
-        # TODO handle next button
-
-        # Handle agreement
+        # handle agreement
         # check if player1 agreed
         if data['information'] == 'p1_agreed':
             player.session.agreements[0] = True
@@ -218,28 +197,19 @@ class Discussion(Page):
 
         # check if all players has agreed
         if player.session.agreements[0] and player.session.agreements[1]:  # player.session.agreements[2] and player.session.agreements[3]:
-            print('BOTH AGREED')
+            # print('BOTH AGREED')
             for i in range(0, 6):
                 if player.session.team_goal_matrix[i][1:] == [False, False, False]:
-
-                    print(f'in {player.id_in_group} {player.session.team_goal_matrix[i][0]} is False:', [player.session.team_goal_matrix[i][1:]])
-
-                    # return {0: dict(agreed=player.session.agree_count)}
                     return {0: dict(finished=False, agreed=player.session.agree_count)}
 
             print('all players agreed and checkboxes for all information are ticked')
-            # return {0: dict(agreed=player.session.agree_count)}
             return {0: dict(finished=True, agreed=player.session.agree_count)}
         else:
             return {0: dict(agreed=player.session.agree_count)}
 
-        #  //if (data.agreed != 2) {
-        #  //if (data.agreed == 2) {
-
-
     @staticmethod
     def before_next_page(player, timeout_happened):
+        # TODO: Which variables has to be stored for analysis?
         pass
-
 
 page_sequence = [AudioVideoCheck, WaitCheckComplete, Discussion, ]
