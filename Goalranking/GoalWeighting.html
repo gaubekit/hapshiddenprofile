@@ -33,10 +33,15 @@
     <p> Please rate how important the following goals are to you.
         There are up to 18 points to allocate.
         Objectives cannot be rated with more than 5 points.</p>
+    <p> We would also like to ask you to select the goal which is the most important to you.<p>
+
+    TODO: add sixth goal to point allocation and spidergraph
+    TODO: add Checkbox for the most important goal
 
 
 
 
+    <!-- TODO: Replace the table with div -->
     <table>
         <tr>
             <td>
@@ -44,24 +49,31 @@
                <u><b>Sum</b></u>: <p id="total_value"></p><br>
 
 
-                {{first_goal}}<br>   <input type="range" name="first_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
-                <span id="first_goal_rank_value">1</span>
+                <!-- first goal -->
+                <input type="checkbox" id="choice_one" onclick="handleCheckbox(this)">  {{first_goal}}:  <span id="first_goal_rank_value">1</span> <br>
+                <input type="range" name="first_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <br><br>
 
-                {{second_goal}}<br>   <input type="range" name="second_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
-                <span id="second_goal_rank_value">1</span>
+                <input type="checkbox" id="choice_two" onclick="handleCheckbox(this)"> {{second_goal}}:  <span id="second_goal_rank_value">1</span><br>
+                <input type="range" name="second_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <br><br>
 
-                {{third_goal}}<br>   <input type="range" name="third_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
-                <span id="third_goal_rank_value">1</span>
+                <br><input type="checkbox" id="choice_three" onclick="handleCheckbox(this)">  {{third_goal}}:  <span id="third_goal_rank_value">1</span><br>
+                <input type="range" name="third_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <br><br>
 
-                {{fourth_goal}}<br>  <input type="range" name="fourth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
-                <span id="fourth_goal_rank_value">1</span><br>
+                <br><input type="checkbox" id="choice_four" onclick="handleCheckbox(this)">  {{fourth_goal}}:  <span id="fourth_goal_rank_value">1</span><br>
+                <input type="range" name="fourth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
                 <br><br>
 
-                {{fifth_goal}}<br>   <input type="range" name="fifth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
-                <span id="fifth_goal_rank_value">1</span><br>
+                <input type="checkbox" id="choice_five" onclick="handleCheckbox(this)">  {{fifth_goal}}:  <span id="fifth_goal_rank_value">1</span><br>
+                <input type="range" name="fifth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
+                <br><br>
+
+                <input type="checkbox" id="choice_six" onclick="handleCheckbox(this)">  {{sixth_goal}}:  <span id="sixth_goal_rank_value">1</span><br>
+                <input type="range" name="sixth_goal_rank" min="1" max="5" value="1" oninput="updateDescription(this)">
+                <br><br>
+
 
 
 
@@ -82,6 +94,31 @@
 
     <!-- Skript für die Aktualisierung der Gesamtsumme und das Erstellen des RadarCharts -->
     <script>
+        // function to handle the checkboxes
+        function handleCheckbox(clickedCheckbox) {
+            const checkboxes = ["choice_one", "choice_two", "choice_three", "choice_four", "choice_five", "choice_six"];
+            // make sure, that there is just one checkbox selected
+            checkboxes.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            // send checkbox information zu otree
+            if (clickedCheckbox.id === "choice_one") {
+                liveSend({'information': js_vars.first_goal_js});
+            } else if (clickedCheckbox.id === "choice_two") {
+                liveSend({'information': js_vars.second_goal_js});
+            } else if (clickedCheckbox.id === "choice_three") {
+                liveSend({'information': js_vars.third_goal_js});
+            } else if (clickedCheckbox.id === "choice_four") {
+                liveSend({'information': js_vars.fourth_goal_js});
+            } else if (clickedCheckbox.id === "choice_five") {
+                liveSend({'information': js_vars.fifth_goal_js});
+            } else if (clickedCheckbox.id === "choice_six") {
+                liveSend({'information': js_vars.sixth_goal_js});
+            }
+        }
+
         // Funktion zur Aktualisierung der Beschreibung und zum Erstellen des RadarCharts
         function updateDescription(input) {
             let value = parseInt(input.value);
@@ -107,7 +144,7 @@
                 type: 'radar',
                 data: {
                     labels: [js_vars.first_goal_js, js_vars.second_goal_js, js_vars.third_goal_js,
-                             js_vars.fourth_goal_js, js_vars.fifth_goal_js],
+                             js_vars.fourth_goal_js, js_vars.fifth_goal_js, js_vars.sixth_goal_js],
                     datasets: [{
                         label: 'Goals',
                         data: [
@@ -115,7 +152,8 @@
                                parseInt(document.querySelector('input[name="second_goal_rank"]').value),
                                parseInt(document.querySelector('input[name="third_goal_rank"]').value),
                                parseInt(document.querySelector('input[name="fourth_goal_rank"]').value),
-                               parseInt(document.querySelector('input[name="fifth_goal_rank"]').value)
+                               parseInt(document.querySelector('input[name="fifth_goal_rank"]').value),
+                               parseInt(document.querySelector('input[name="sixth_goal_rank"]').value)
                                ],
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',

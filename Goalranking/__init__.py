@@ -33,6 +33,7 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    most_important_goal = models.StringField()
     first_goal_name = models.StringField()
     first_goal_rank = models.IntegerField(label="", min=1, max=5)
     second_goal_name = models.StringField()
@@ -43,73 +44,98 @@ class Player(BasePlayer):
     fourth_goal_rank = models.IntegerField(label="", min=1, max=5)
     fifth_goal_name = models.StringField()
     fifth_goal_rank = models.IntegerField(label="", min=1, max=5)
+    sixth_goal_name = models.StringField()
+    sixth_goal_rank = models.IntegerField(label="", min=1, max=5)
+
 
 # PAGES
 
 class GoalWeighting(Page):
     form_model = 'player'
-    form_fields = ['first_goal_rank', 'second_goal_rank', 'third_goal_rank', 'fourth_goal_rank', 'fifth_goal_rank']
+    form_fields = ['first_goal_rank', 'second_goal_rank', 'third_goal_rank',
+                   'fourth_goal_rank', 'fifth_goal_rank', 'sixth_goal_rank']
 
 
+
+    # @staticmethod
+    # def vars_for_template(player):
+    #
+    #     # setting a goal_count dict for counting goals mentioned
+    #     goal_counts = {
+    #         'human_resources': 0, 'cost': 0, 'duration': 0, 'revenue': 0,
+    #         'new_tech': 0, 'social_benefits': 0} #, 'goal7': 0, 'goal8': 0}
+    #
+    #     # count how often the goals were mentioned by the participants
+    #     for p in player.subsession.get_players():
+    #         for goal, count in goal_counts.items():
+    #             # goal_counts[goal] += getattr(p, goal)
+    #             goal_counts[goal] += p.participant.goal_list[goal]
+    #
+    #     # separate named and unnamed goals
+    #     goal_list = {goal: count for goal, count in goal_counts.items() if count != 0}
+    #     unnamed_goals = {goal: count for goal, count in goal_counts.items() if count == 0}
+    #
+    #     # chose most mentioned goals
+    #     sorted_goals = sorted(goal_list.items(), key=itemgetter(1), reverse=True)
+    #     chosen_goals = [goal[0] for goal in sorted_goals[:5]]
+    #
+    #     unnamed_goals = [goal for goal in unnamed_goals if goal not in chosen_goals]
+    #
+    #     # add goals by random, if there are less than 5 mentioned
+    #     if len(chosen_goals) < 5:
+    #         short_come = 5 - len(chosen_goals)
+    #         random.seed(C.SEED)
+    #         additional_goals = random.sample(unnamed_goals, short_come)
+    #         chosen_goals.extend(additional_goals)
+    #
+    #     # save chosen goals in session var
+    #     player.session.chosen_goals = chosen_goals
+    #
+    #     player.first_goal_name = chosen_goals[0]
+    #     player.second_goal_name = chosen_goals[1]
+    #     player.third_goal_name = chosen_goals[2]
+    #     player.fourth_goal_name = chosen_goals[3]
+    #     player.fifth_goal_name = chosen_goals[4]
+    #
+    #     return dict(first_goal=chosen_goals[0],
+    #                 second_goal=chosen_goals[1],
+    #                 third_goal=chosen_goals[2],
+    #                 fourth_goal=chosen_goals[3],
+    #                 fifth_goal=chosen_goals[4]
+    #                 )
 
     @staticmethod
     def vars_for_template(player):
+        # set names of goals for formfields
+        print(player.session.goals)
+        player.first_goal_name = player.session.goals[0]
+        player.second_goal_name = player.session.goals[1]
+        player.third_goal_name = player.session.goals[2]
+        player.fourth_goal_name = player.session.goals[3]
+        player.fifth_goal_name = player.session.goals[4]
+        player.sixth_goal_name = player.session.goals[5]
 
-        # setting a goal_count dict for counting goals mentioned
-        goal_counts = {
-            'human_resources': 0, 'cost': 0, 'duration': 0, 'revenue': 0,
-            'new_tech': 0, 'social_benefits': 0} #, 'goal7': 0, 'goal8': 0}
-
-        # count how often the goals were mentioned by the participants
-        for p in player.subsession.get_players():
-            for goal, count in goal_counts.items():
-                # goal_counts[goal] += getattr(p, goal)
-                goal_counts[goal] += p.participant.goal_list[goal]
-
-        # separate named and unnamed goals
-        goal_list = {goal: count for goal, count in goal_counts.items() if count != 0}
-        unnamed_goals = {goal: count for goal, count in goal_counts.items() if count == 0}
-
-        # chose most mentioned goals
-        sorted_goals = sorted(goal_list.items(), key=itemgetter(1), reverse=True)
-        chosen_goals = [goal[0] for goal in sorted_goals[:5]]
-
-        unnamed_goals = [goal for goal in unnamed_goals if goal not in chosen_goals]
-
-        # add goals by random, if there are less than 5 mentioned
-        if len(chosen_goals) < 5:
-            short_come = 5 - len(chosen_goals)
-            random.seed(C.SEED)
-            additional_goals = random.sample(unnamed_goals, short_come)
-            chosen_goals.extend(additional_goals)
-
-        # save chosen goals in session var
-        player.session.chosen_goals = chosen_goals
-
-        player.first_goal_name = chosen_goals[0]
-        player.second_goal_name = chosen_goals[1]
-        player.third_goal_name = chosen_goals[2]
-        player.fourth_goal_name = chosen_goals[3]
-        player.fifth_goal_name = chosen_goals[4]
-
-        return dict(first_goal=chosen_goals[0],
-                    second_goal=chosen_goals[1],
-                    third_goal=chosen_goals[2],
-                    fourth_goal=chosen_goals[3],
-                    fifth_goal=chosen_goals[4]
-                    )
+        return dict(first_goal=player.first_goal_name,
+                    second_goal=player.second_goal_name,
+                    third_goal=player.third_goal_name,
+                    fourth_goal=player.fourth_goal_name,
+                    fifth_goal=player.fifth_goal_name,
+                    sixth_goal=player.sixth_goal_name)
 
     @staticmethod
     def js_vars(player: Player):
-        return dict(first_goal_js=player.first_goal_name,
-                    second_goal_js=player.second_goal_name,
-                    third_goal_js=player.third_goal_name,
-                    fourth_goal_js=player.fourth_goal_name,
-                    fifth_goal_js=player.fifth_goal_name
+        # provide names for java
+        return dict(first_goal_js=player.session.goals[0],
+                    second_goal_js=player.session.goals[1],
+                    third_goal_js=player.session.goals[2],
+                    fourth_goal_js=player.session.goals[3],
+                    fifth_goal_js=player.session.goals[4],
+                    sixth_goal_js=player.session.goals[5],
                     )
 
     @staticmethod
     def error_message(player: Player, values):
+        # TODO
         num_selected = (values['first_goal_rank']
                         + values['second_goal_rank']
                         + values['third_goal_rank']
@@ -117,6 +143,12 @@ class GoalWeighting(Page):
                         + values['fifth_goal_rank'])
         if num_selected > 18:
             return "Please make sure that you allocate a maximum of 18 points."
+
+    @staticmethod
+    def live_method(player, data):
+        # TODO adapt functionality of error_message -> show next button if requirements fulfilled
+        player.most_important_goal = data['information']
+        print(data['information'])
 
     @staticmethod
     def before_next_page(player, timeout_happened):

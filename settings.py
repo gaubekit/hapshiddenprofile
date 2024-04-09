@@ -7,7 +7,7 @@ SESSION_CONFIGS = [
     dict(name='Pilot', num_demo_participants=20, app_sequence=['Pilot']),
     #dict(name='InterventionA', num_demo_participants=2, app_sequence=[]),
     #dict(name='InterventionB', num_demo_participants=2, app_sequence=['Premeeting', 'Intro']),
-    dict(name='InterventionC', num_demo_participants=2, app_sequence=['Intro', 'Woop', 'Goalranking', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC']), # 'Intro',
+    dict(name='InterventionC', num_demo_participants=2, app_sequence=['Intro', 'Goalranking', 'Woop', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC']), # 'Intro',
     dict(name='old_InterventionC', num_demo_participants=2, app_sequence=['Intro', 'old_Woop', 'old_Goalranking', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC'])
 ]
 
@@ -26,7 +26,8 @@ PARTICIPANT_FIELDS = ['goal_list',
                       'ProjectC_list',
                       ]
 
-SESSION_FIELDS = ['desc_pro_A',  # String describing Project A
+SESSION_FIELDS = ['goals',  # setup of all predefined (Intro) goals
+                  'desc_pro_A',  # String describing Project A
                   'desc_pro_B',  # String describing Project B
                   'desc_pro_C',  # String describing Project C
                   'chosen_goals',

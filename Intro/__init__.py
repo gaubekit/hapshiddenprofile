@@ -49,7 +49,17 @@ class Player(BasePlayer):
 
 # PAGES
 class PreIntroduction(Page):
-    pass  # TODO maybe something necessary to handle the agreements
+
+    # TODO maybe something necessary to handle the agreements
+
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        # initialize predefined goals as session variable
+        player.session.goals = [
+            'human_resources', 'cost', 'duration',
+            'revenue', 'new_tech', 'social_benefits'
+        ]
+
 
 
 class Introduction(Page):
