@@ -89,7 +89,8 @@
     </table>
 
 
-    <br>
+    <br><br>
+    <div id="display_next_button" style="display: none"> {{ next_button }} </div>
 
 
     <!-- Skript für die Aktualisierung der Gesamtsumme und das Erstellen des RadarCharts -->
@@ -119,6 +120,17 @@
             }
         }
 
+        // function receives Information from oTrees Python part
+        function liveRecv(data) {
+            // show next button if a most important goal ist chosen
+            if (data.valid == true) {
+                document.getElementById("display_next_button").style.display = "block";
+            }
+            if (data.valid == false) {;
+                document.getElementById("display_next_button").style.display = "none";
+            }
+        }
+
         // Funktion zur Aktualisierung der Beschreibung und zum Erstellen des RadarCharts
         function updateDescription(input) {
             let value = parseInt(input.value);
@@ -132,6 +144,9 @@
             });
 
             document.getElementById('total_value').innerText = `${total}`;
+
+            //send total value to oTree
+            liveSend({'information': {'count': total}})
 
             // Aufrufen der Funktion zur Radarcharterstellung
             createRadarChart(total);
@@ -174,11 +189,6 @@
         // Initiales Erstellen des RadarCharts
         createRadarChart(5);
     </script>
-
-    <br>
-
-    {{ next_button }}
-
 
 {{ endblock }}
 

@@ -33,7 +33,8 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    most_important_goal = models.StringField()
+    most_important_goal = models.StringField(initial='')
+    goal_allocation_count = models.IntegerField(initial=0)
     first_goal_name = models.StringField()
     first_goal_rank = models.IntegerField(label="", min=1, max=5)
     second_goal_name = models.StringField()
@@ -133,31 +134,38 @@ class GoalWeighting(Page):
                     sixth_goal_js=player.session.goals[5],
                     )
 
-    @staticmethod
-    def error_message(player: Player, values):
-        # TODO
-        num_selected = (values['first_goal_rank']
-                        + values['second_goal_rank']
-                        + values['third_goal_rank']
-                        + values['fourth_goal_rank']
-                        + values['fifth_goal_rank'])
-        if num_selected > 18:
-            return "Please make sure that you allocate a maximum of 18 points."
 
     @staticmethod
     def live_method(player, data):
-        # TODO adapt functionality of error_message -> show next button if requirements fulfilled
-        player.most_important_goal = data['information']
-        print(data['information'])
+        # update the most important goal
+        if data['information'] in player.session.goals:
+            player.most_important_goal = data['information']
+
+        # update the total count
+        if 'count' in data['information']:
+            print('change in total count')
+            player.goal_allocation_count = data['information']['count']
+            print(player.id_in_group, player.goal_allocation_count)
+
+        # condition for displaying next button
+        if (len(player.most_important_goal) > 0) and (player.goal_allocation_count <= 18):
+            return {player.id_in_group: dict(valid=True)}
+
+        # condition for hiding next button
+        if (len(player.most_important_goal) == 0) or (player.goal_allocation_count > 18):
+            return {player.id_in_group: dict(valid=False)}
 
     @staticmethod
     def before_next_page(player, timeout_happened):
         participant = player.participant
-        participant.goal_ranking = {player.first_goal_name:  player.first_goal_rank,
+        # TODO -> clarify: cause the change "most_important_goal" any errors in followup apps?
+        participant.goal_ranking = {'most_important_goal': player.most_important_goal,
+                                    player.first_goal_name:  player.first_goal_rank,
                                     player.second_goal_name:  player.second_goal_rank,
                                     player.third_goal_name:  player.third_goal_rank,
                                     player.fourth_goal_name:  player.fourth_goal_rank,
-                                    player.fifth_goal_name:  player.fifth_goal_rank}
+                                    player.fifth_goal_name:  player.fifth_goal_rank,
+                                    player.sixth_goal_name:  player.sixth_goal_rank}
 
         # TODO: Delete after deploying, because its initialized in app "Intro"
         player.session.desc_pro_A = 'Project A is a virtual reality fitness adventure game that combines immersive ' \
@@ -170,8 +178,6 @@ class GoalWeighting(Page):
         player.session.desc_pro_C = 'Project C is a smart home energy management system that integrates AI algorithms'\
                                     + ', IoT sensors, and user behavior analysis to optimize energy usage, '\
                                     + 'reduce costs, and minimize environmental impact.'
-
-
 
 
 class FinishGoalWeighting(WaitPage):

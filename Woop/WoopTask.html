@@ -17,20 +17,12 @@
         }
     </style>
 
-    <p>Please select the two goals with which you agree the most:</p>
+    <p>On the previous side you choose {{most_important_goal}} as the most important goal for innovative projects.</p>
 
-    <table border="1">
-        <tr>
-            {{ for field in C.POSSIBLE_CHOICES }}
-                <td><label> {{ field.label }} </label></td>
-            {{ endfor }}
-        </tr>
-        <tr>
-            {{ for field in C.POSSIBLE_CHOICES }}
-                <td><input type="checkbox" name="{{ field.name }}" value="1"> </td>
-            {{ endfor }}
-        </tr>
-    </table>
+    <br> TODO: Further instructions
+    <br> TODO: O-O-P of WOOP
+
+
     <br>
     {{ next_button }}
 {{ endblock }}
