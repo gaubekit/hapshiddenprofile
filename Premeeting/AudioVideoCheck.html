@@ -1,20 +1,198 @@
 {{ block title }}
-   Audi Video Check
+   Equipment Check
 {{ endblock }}
 
 {{ block content }}
 
-    PLACEHOLDER audio video check
+    Befor your enter the next Page, please check your audio and video<br><br>
+    <b>TODO: MAKE MICROPHONE CHECK WORK</b><br><br>
 
+
+    <style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+     #meter {
+            width: 200px;
+            height: 20px;
+            background-color: #eee;
+            position: relative;
+     }
+     #level {
+            height: 100%;
+            background-color: green;
+            transition: width 0.1s;
+      }
+     label {
+            display: block;
+            margin-bottom: 10px;
+     }
+      .container {
+            align-items: left;
+      }
+      .dropdown {
+            margin-right: 10px;
+      }
+      .checkbox {
+            margin-left: auto;
+      }
+    </style>
+
+    <div class="my-box">
+    <h5>Audio Output Check</h5>
+     <audio controls>
+        <source src="{% static 'ping.mpeg' %}" type="audio/mpeg">
+
+
+        Your browser does not support the audio element.
+    </audio>
+     <p>How many times did you hear the sound?</p>
+        <div>
+
+
+
+        <select class = dropdown id="myDropdown" onchange="handleDropdownChange()">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+       <input type="checkbox" class="checkbox" id="audioCheckbox" disabled
+           readonly value="{{ player.audioCheck}}" >Audio works</input>
+    </div>
+
+
+    <script>
+        function handleDropdownChange() {
+            const dropdown = document.getElementById("myDropdown");
+            const checkbox = document.getElementById("audioCheckbox");
+            if (dropdown.value === "3") {
+                checkbox.checked = true;
+                const radio = document.getElementById('audioCheck');
+
+                forminputs.audioCheck.value = 1;
+            } else {
+                checkbox.checked = false;
+            }
+        }
+    </script>
+
+    <hr>
+    <h5>Microphone Decibel Level</h5>
+    <p>Click the button below and say something to check your microphone:</p>
+    <!-- Microphone Test -->
+    <button  type="button"  onclick="checkMicrophone()">Check Microphone</button>
+    <!-- Decibel Level Meter -->
+    <div class = dropdown id="meter">
+       <div id="level"></div>
+    </div>
+     <!-- Checkbox gets automatically ticked if Mic is working -->
+    <input class="checkbox" type="checkbox" id="micCheckbox"
+           disabled readonly value="{{player.micCheck}}">Microphone works</input>
+    <hr>
+     <!-- Checkbox needs to be ticked explicitly -->
+    <h5>Camera Test</h5>
+    <button  type="button" id="startButton">Start Camera</button>
+    <input type="checkbox" id="stopCheckbox" disabled value="{{ player.cameraCheck}}"> Camera Works </input>
+    <input type="checkbox" id="stopCamera"> Stop Camera </input>
+    <div id="videoContainer"></div>
+
+    <button id="nextButton" hidden >Next</button>
+
+    <!-- Display the warning message -->
+    <p id="warningMessage" hidden>Please leave the experiment now.</p>
+
+    <!-- Scripts for audio play -->
+    <!-- Scripts for checking microphone and display decibel meter-->
+    <script>
+        async function checkMicrophone() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            console.log('Microphone access granted:', stream);
+            startDecibelMeter(stream);
+        } catch (error) {
+            console.error('Error accessing microphone:', error);
+            alert('Microphone not detected or not working. Please try again.');
+            }
+        }
+
+        // microphone check
+        function startDecibelMeter(stream) {
+            const audioContext = new AudioContext();
+            const source = audioContext.createMediaStreamSource(stream);
+            const analyser = audioContext.createAnalyser();
+            source.connect(analyser);
+            analyser.fftSize = 256;
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            function updateMeter() {
+                analyser.getByteFrequencyData(dataArray);
+                const average = dataArray.reduce((sum, value) => sum + value, 0) / bufferLength;
+                const decibelLevel = Math.max(0, average - 100); // Adjust threshold as needed
+                const meterWidth = (decibelLevel / 100) * 100; // Scale to fit meter width
+                if (meterWidth > 10) {
+                    micCheckbox.checked = true;
+                    micCheckbox.disabled=true;
+                    const radio = document.getElementById('micCheck');
+                    forminputs.micCheck.value = 1;
+                  }
+                document.querySelector('#level').style.width = `${meterWidth}%`;
+                requestAnimationFrame(updateMeter);
+            }
+            updateMeter();
+        }
+    </script>
+    <!-- Video Check -->
+    <script>
+        const startButton = document.getElementById('startButton');
+        const stopCheckbox = document.getElementById('stopCheckbox');
+        const stopCamera = document.getElementById('stopCamera');
+        const videoContainer = document.getElementById('videoContainer');
+        let stream;
+        startButton.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.autoplay = true;
+                videoContainer.appendChild(video);
+                startButton.disabled = true;
+                stopCheckbox.checked = true;
+                forminputs.cameraCheck.value = 1;
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
+        });
+        stopCamera.addEventListener('change', () => {
+            if (stopCamera.checked) {
+                stream.getTracks().forEach(track => track.stop());
+                videoContainer.innerHTML = '';
+                startButton.disabled = true;
+                const radio = document.getElementById('cameraCheck');
+            } else {
+                startButton.disabled = false;
+            }
+        });
+    </script>
+
+    </div>
+    <br/><br/>
+
+    {{formfields}}
+    {{ next_button }}
     <br><br>
 
-    PLACEHOLDER Introduction to Discussion<br><br>
+    PLACEHOLDER Introduction to Discussion, just Notes<br><br>
     By clicking the Agree button, you confirm that you agree with the current selection.
     If there are any changes after the agreement, you have to agree again.
     The amount of total agreements is shown below. After all players have agreed the lock in button will displayed.
     If any of the Participants confirm the lock-in button, there are no further changes possible.
-    <br><br>
 
-    {{ next_button }}
+
+
 
 {{ endblock }}

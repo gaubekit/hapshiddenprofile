@@ -36,12 +36,13 @@ class C(BaseConstants):
     #
     # UNIQUE_INFORMATION_KEYS, SHARED_INFORMATION_KEYS = split_information(INFORMATION_KEYS, 2)
 
-    # Hardcoded uniqe and shared informations
+    # Hardcoded unique and shared information
     UNIQUE_INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue']
     SHARED_INFORMATION_KEYS = ['new_tech', 'social_benefits']
     GOALS = UNIQUE_INFORMATION_KEYS+SHARED_INFORMATION_KEYS
 
-    # Dictionarios containing information provided in the Page ProjectPitch
+    # Dictionaries containing information, will be allocated to the participants in the page ProjectPitch
+    # Specific information on each criterion for each project
     INFORMATION_A = {'human_resources': 'placeholder HUMAN RESOURCES information A',
                      'cost': 'placeholder COST information A',
                      'duration': 'placeholder DURATION information A',
@@ -106,13 +107,14 @@ class ProjectPitch(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
 
-        # store session variables
+        # safe the variables in a session field # TODO: could also be done at the intro page
         player.session.INFORMATION_A = C.INFORMATION_A
         player.session.INFORMATION_B = C.INFORMATION_B
         player.session.INFORMATION_C = C.INFORMATION_C
 
         # store participant variables which are keys for session variables INFORMATION_A, _B and _C
         # TODO add further comments to make clear where and why this is needed
+        #      Note -> could replace Participant.ProjectA_List ect in Projectbygoalindividual
         player.participant.unique_information = player.unique_information
         player.participant.shared_information = player.shared_information
         # Note -> How to use: player.session.INFORMATION_C[player.participant.shared_information]
@@ -120,47 +122,49 @@ class ProjectPitch(Page):
         # shared and unique player information
         information = [player.unique_information, player.shared_information]
 
+        # TODO: CLEAN THE SHIT BELOW UP...
         # Dictionarys withe names and labels for the formfields in ProjectRating, stored in session
         criteria_list_A = [f"ProjectA_{criteria}" for criteria in C.GOALS]
-        projectA_criteria = [
-            dict(name=f'{criteria_list_A[0]}', label=f'{criteria_list_A[0]}'),
-            dict(name=f'{criteria_list_A[1]}', label=f'{criteria_list_A[1]}'),
-            dict(name=f'{criteria_list_A[2]}', label=f'{criteria_list_A[2]}'),
-            dict(name=f'{criteria_list_A[3]}', label=f'{criteria_list_A[3]}'),
-            dict(name=f'{criteria_list_A[4]}', label=f'{criteria_list_A[4]}'),
-            dict(name=f'{criteria_list_A[5]}', label=f'{criteria_list_A[5]}'),]
+        # projectA_criteria = [
+        #     dict(name=f'{criteria_list_A[0]}', label=f'{criteria_list_A[0]}'),
+        #     dict(name=f'{criteria_list_A[1]}', label=f'{criteria_list_A[1]}'),
+        #     dict(name=f'{criteria_list_A[2]}', label=f'{criteria_list_A[2]}'),
+        #     dict(name=f'{criteria_list_A[3]}', label=f'{criteria_list_A[3]}'),
+        #     dict(name=f'{criteria_list_A[4]}', label=f'{criteria_list_A[4]}'),
+        #     dict(name=f'{criteria_list_A[5]}', label=f'{criteria_list_A[5]}'),]
 
         # store the dictionary as projectA_criteria in session fields
-        player.session.projectA_criteria = projectA_criteria
+        #player.session.projectA_criteria = projectA_criteria
+
         # store a list of shared and unique- information names of the player
         player.participant.ProjectA_list = [crit for crit in criteria_list_A if crit[9:] in information]
-        print('information: ', player.participant.ProjectA_list)
+        print('PROJECTA_LIST ', player.participant.ProjectA_list)
 
         # repeat for B
         # criteria_list_B = [f"ProjectB_{criteria}" for criteria in player.session.chosen_goals]
         criteria_list_B = [f"ProjectB_{criteria}" for criteria in C.GOALS]
-        projectB_criteria = [
-            dict(name=f'{criteria_list_B[0]}', label=f'{criteria_list_B[0]}'),
-            dict(name=f'{criteria_list_B[1]}', label=f'{criteria_list_B[1]}'),
-            dict(name=f'{criteria_list_B[2]}', label=f'{criteria_list_B[2]}'),
-            dict(name=f'{criteria_list_B[3]}', label=f'{criteria_list_B[3]}'),
-            dict(name=f'{criteria_list_B[4]}', label=f'{criteria_list_B[4]}'),
-            dict(name=f'{criteria_list_B[5]}', label=f'{criteria_list_B[5]}'),]
+        # projectB_criteria = [
+        #     dict(name=f'{criteria_list_B[0]}', label=f'{criteria_list_B[0]}'),
+        #     dict(name=f'{criteria_list_B[1]}', label=f'{criteria_list_B[1]}'),
+        #     dict(name=f'{criteria_list_B[2]}', label=f'{criteria_list_B[2]}'),
+        #     dict(name=f'{criteria_list_B[3]}', label=f'{criteria_list_B[3]}'),
+        #     dict(name=f'{criteria_list_B[4]}', label=f'{criteria_list_B[4]}'),
+        #     dict(name=f'{criteria_list_B[5]}', label=f'{criteria_list_B[5]}'),]
 
-        player.session.projectB_criteria = projectB_criteria
+        #player.session.projectB_criteria = projectB_criteria
         player.participant.ProjectB_list = [crit for crit in criteria_list_B if crit[9:] in information]
 
         # repeat for C
         criteria_list_C = [f"ProjectC_{criteria}" for criteria in C.GOALS]
-        projectC_criteria = [
-            dict(name=f'{criteria_list_C[0]}', label=f'{criteria_list_C[0]}'),
-            dict(name=f'{criteria_list_C[1]}', label=f'{criteria_list_C[1]}'),
-            dict(name=f'{criteria_list_C[2]}', label=f'{criteria_list_C[2]}'),
-            dict(name=f'{criteria_list_C[3]}', label=f'{criteria_list_C[3]}'),
-            dict(name=f'{criteria_list_C[4]}', label=f'{criteria_list_C[4]}'),
-            dict(name=f'{criteria_list_C[5]}', label=f'{criteria_list_C[5]}'),]
+        # projectC_criteria = [
+        #     dict(name=f'{criteria_list_C[0]}', label=f'{criteria_list_C[0]}'),
+        #     dict(name=f'{criteria_list_C[1]}', label=f'{criteria_list_C[1]}'),
+        #     dict(name=f'{criteria_list_C[2]}', label=f'{criteria_list_C[2]}'),
+        #     dict(name=f'{criteria_list_C[3]}', label=f'{criteria_list_C[3]}'),
+        #     dict(name=f'{criteria_list_C[4]}', label=f'{criteria_list_C[4]}'),
+        #     dict(name=f'{criteria_list_C[5]}', label=f'{criteria_list_C[5]}'),]
 
-        player.session.projectC_criteria = projectC_criteria
+        #player.session.projectC_criteria = projectC_criteria
         player.participant.ProjectC_list = [crit for crit in criteria_list_C if crit[9:] in information]
 
         # initialize goal matrix as session variable, is in downstream apps needed for the combined goal matrix
@@ -175,14 +179,12 @@ class ProjectPitch(Page):
 
 
 
-# TODO: Note -> If we ask at this point to rank the goals depending on the provided Information (as shown in the MockUP)
+# TODO: Note -> If we ask at this point to rate the goals depending on the provided Information (as shown in the MockUP)
 #               the users could say only something about the information they have.. so each individual could rank the
 #               projects by the two them given Information
 
 
 class ResultsWaitPage(WaitPage):
      pass
-
-
 
 page_sequence = [ProjectPitch]

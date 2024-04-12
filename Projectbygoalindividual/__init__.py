@@ -108,25 +108,7 @@ class ProjectRating(Page):
     def before_next_page(player, timeout_happened):
         """handle variables for other apps"""  # TODO -> clarify: wird diese app vor allen apps die die variable brauchen aufgerufen?
 
-        # TODO: Doesn't work in new version because chosen_goals arent defined. Are the goals all ready stored?
-        #       replaced by team_goals_avg
-        # if player.id_in_group == 1:
-        #     team_goals = []
-        #     # does this work?
-        #     for p in player.subsession.get_players(): # TODO rename to goals_of_team_members
-        #         team_goals.append(
-        #             [p.participant.goal_ranking[p.session.goals[0]],
-        #              p.participant.goal_ranking[p.session.goals[1]],
-        #              p.participant.goal_ranking[p.session.goals[2]],
-        #              p.participant.goal_ranking[p.session.goals[3]],
-        #              p.participant.goal_ranking[p.session.goals[4]],
-        #              p.participant.goal_ranking[p.session.goals[5]]]
-        #         )
-        #
-        #     player.session.team_goals = team_goals  # used in MeetingC store rankings of all players for visualization during jitsi-call
-
         # fill combined matrix with player choices
-        # TODO -> Note: No changes after adjustment
         # human resources
         player.session.goal_matrix[0][1] += player.ProjectA_human_resources
         player.session.goal_matrix[0][2] += player.ProjectB_human_resources
