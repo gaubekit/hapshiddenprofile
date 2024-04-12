@@ -50,8 +50,6 @@ class Player(BasePlayer):
 
 # PAGES
 class MeetingC(Page):
-    # form_model = 'player'
-    # form_fields = ['final_choice']
 
     @staticmethod
     def vars_for_template(player):
@@ -95,15 +93,26 @@ class MeetingC(Page):
                     unique_b=player.session.INFORMATION_B[player.participant.unique_information],
                     shared_b=player.session.INFORMATION_B[player.participant.shared_information],
                     unique_c=player.session.INFORMATION_C[player.participant.unique_information],
-                    shared_c=player.session.INFORMATION_C[player.participant.shared_information])
+                    shared_c=player.session.INFORMATION_C[player.participant.shared_information],
+                      # individual goal preference
+                    most_important_goal=player.participant.goal_ranking['most_important_goal'])
+
+    # TODO -> Note: is no longer necessary in the new version
+    # @staticmethod
+    # def js_vars(player):
+    #     # store rankings of all players for visualization during jitsi-call
+    #     return dict(one=player.session.team_goals[0],  # goal-rating of player1 (list of integers)
+    #                 two=player.session.team_goals[1]  # goal-rating of player2
+    #                 # TODO three=player.session.team_goals[2], four=player.session.team_goals[3]
+    #                 )
 
     @staticmethod
     def js_vars(player):
-        # store rankings of all players for visualization during jitsi-call
-        return dict(one=player.session.team_goals[0],  # goal-rating of player1 (list of integers)
-                    two=player.session.team_goals[1]  # goal-rating of player2
-                    # TODO three=player.session.team_goals[2], four=player.session.team_goals[3]
-                    )
+        # provide averaged goals and goal names for the visualization during jitsi-meeting
+        temp_goal_ranks = []
+        for i in range(5):
+            temp_goal_ranks.append(player.session.team_goals_avg[player.session.goals[i]])
+        return dict(team_goals=temp_goal_ranks)
 
     @staticmethod
     def live_method(player, data):

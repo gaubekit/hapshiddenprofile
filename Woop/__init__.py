@@ -51,7 +51,9 @@ class Player(BasePlayer):
     # social_benefits = models.BooleanField(blank=True, null=True, field_maybe_none=True)
     # # goal7 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
     # # goal8 = models.BooleanField(blank=True, null=True, field_maybe_none=True)
-    pass
+    outcome = models.LongStringField(label='For the firm, an innovation project should...')
+    obstacle = models.LongStringField(label='An obstacle in reality is ....')
+    plan = models.LongStringField(label='If the obstacle occurs, then I will..')
 
 
 # PAGES
@@ -61,7 +63,8 @@ class Player(BasePlayer):
 
 class WoopTask(Page):
     form_model = 'player'
-    #
+    form_fields = ['outcome', 'obstacle', 'plan']
+
     # @staticmethod
     # def get_form_fields(player: Player):
     #     #print([wish['name'] for wish in C.POSSIBLE_CHOICES])

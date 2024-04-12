@@ -86,6 +86,13 @@
         }
 
     </style>
+    <p>
+        In the beginning of the experiment you choose {{most_important_goal}} as the most important goal to archive in an innovative projects. <br>
+        Depending of the Goal ratings of the team the overall Team Goal is shown in the SpiderGraph on the right side. <br>
+        Also, depending on the previous discussion, the information about which Projects fulfills which criteria best is summarized in a table. <br>
+        <br><br>
+        Please discuss now which of the three projects (see information panel) you would choose as a team.
+    </p>
 
     <!-- show the container and related content of the first row (upper_row) on the page -->
     <div class="upper_row">
@@ -94,9 +101,10 @@
             <div id=meet></div> <!--  Videomeeting, is working :) -->
         </div>
         <!--right box for the spider graph-->
-        <!-- do i need the id tag below? -->
+        <!-- do I need the id tag below? -->
         <div id="radarChartContainer" class="upper_column upper_right" style="border: 2px solid green">
             <canvas id ="myRadarChart"></canvas>
+
         </div>
     </div>
 
@@ -292,22 +300,14 @@
             let myRadarChart = new Chart(ctx, {
                 type: 'radar',
              data: {
-                    labels: {{session.chosen_goals}},
+                    labels: {{session.goals}},
                     datasets: [{
-                        label: 'Player2',
-                        data: js_vars.one
-                               ,
+                        label: 'averaged goals for the Team',
+                        data: js_vars.team_goals,
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 2
                     },
-                    {
-                        label: 'Player1',
-                        data: js_vars.two,
-                        backgroundColor: 'rgba(5, 192, 5, 0.2)',
-                        borderColor: 'rgba(5, 192, 5, 1)',
-                        borderWidth: 2
-                    } // TODO: add here datasets for player three and four
                     ]
                 },
 
@@ -327,7 +327,7 @@
     </script>
 
     <!--Script for Jitsi Meeting -->
-    <!-- Version from 2024-04-03 Anuja's Weakest Link Game -->
+    <!-- Version from 2024-04-03 Anuja's Weakest Link Game (just copy paste)-->
     <script>
         const domain = "meet.jit.si"; //Here goes your domain where the meeting takes place.
         var isStreamOn = false; //This is a variable I've defined to use later.

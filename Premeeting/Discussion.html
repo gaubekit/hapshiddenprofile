@@ -26,11 +26,11 @@
         }
 
         .top-left-subcontainer {
-            height: 550%;
+            height: 55%;
         }
 
         .bottom-left-subcontainer {
-            height: 540%;
+            height: 45%;
             padding: 10px;
         }
 
@@ -78,8 +78,8 @@
                <div id=meet></div>  <!-- Videomeeting, is working :) -->
             </div>
             <div id="choice" class="bottom-left-subcontainer" style="background-color: lightgreen;">
-                <h2>Project-Goal Matrix</h2>
-                Based on your previous Rankings: {{session.goals_string}}<br>
+                <h2>Project-Information Matrix</h2>
+                Based on your previous ratings, {{session.goals_string}}
                 Please complete the Matrix below:
 
                  <!--Table containing the project-matrix-->
@@ -129,7 +129,7 @@
                 </table>
             </div>
             <div id="choice_done"  class="bottom-left-subcontainer" style="background-color: red; display: none">
-            <br><br><p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
+            <br><br><p>All players agreed to the setup. You are not allowed to make any further changes</p>
         </div>
         </div>
 
@@ -154,7 +154,7 @@
             </div>
 
             <div class="bottom-right-subcontainer"style="background-color: lightyellow;">
-                <h2>Agreement to Project choice</h2>
+                <h2>Agreement</h2>
                 <p>
                     Do you agree with the current goal-matrix set up?<br><br>
 

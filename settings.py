@@ -5,10 +5,10 @@ SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fe
 # InterventionA = Control; InterventionB = GoalSetting; InterventionC = GoalSetting + Spidergraph
 SESSION_CONFIGS = [
     dict(name='Pilot', num_demo_participants=20, app_sequence=['Pilot']),
-    #dict(name='InterventionA', num_demo_participants=2, app_sequence=[]),
-    #dict(name='InterventionB', num_demo_participants=2, app_sequence=['Premeeting', 'Intro']),
+    # dict(name='InterventionA', num_demo_participants=2, app_sequence=[]),
+    # dict(name='InterventionB', num_demo_participants=2, app_sequence=['Premeeting', 'Intro']),
     dict(name='InterventionC', num_demo_participants=2, app_sequence=['Intro', 'Goalranking', 'Woop', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC']), # 'Intro',
-    dict(name='old_InterventionC', num_demo_participants=2, app_sequence=['Intro', 'old_Woop', 'old_Goalranking', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC'])
+    # dict(name='old_InterventionC', num_demo_participants=2, app_sequence=['Intro', 'old_Woop', 'old_Goalranking', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC'])
 ]
 
 LANGUAGE_CODE = 'en'
@@ -30,8 +30,9 @@ SESSION_FIELDS = ['goals',  # setup of all predefined (Intro) goals
                   'desc_pro_A',  # String describing Project A
                   'desc_pro_B',  # String describing Project B
                   'desc_pro_C',  # String describing Project C
-                  'chosen_goals',
-                  'team_goals',  # used for SpiderGraph during jitsi call
+                  # 'chosen_goals',
+                  'team_goals',  # old: used for SpiderGraph during jitsi call
+                  'team_goals_avg',  # new: used for SpiderGraph during jitsi call
                   'INFORMATION_A',
                   'INFORMATION_B',
                   'INFORMATION_C',
@@ -55,6 +56,6 @@ ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 SECRET_KEY = 'blahblah'
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
-INSTALLED_APPS = ['otree']
+INSTALLED_APPS = ['otree'] #numpy
 
 

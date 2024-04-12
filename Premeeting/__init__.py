@@ -12,6 +12,7 @@ is Needed in Version:
 
 
 from otree.api import *
+import numpy as np
 
 
 
@@ -35,13 +36,20 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+    audioCheck = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Audio Output',
+                                     attrs={"invisible": True})
+    micCheck = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Microphone Input',
+                                   attrs={"invisible": True})
+    cameraCheck = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Camera View',
+                                      attrs={"invisible": True})
 
 
 # PAGES
 class AudioVideoCheck(Page):
-    # TODO add audio and video check
-    # Note for Meeting A it has in the MeetingA App
+    # TODO -> Question: What to do if the Check fails? In WeakestLink Game skip to ThankYou-Page (app)
+    form_model = 'player'
+    form_fields = ['cameraCheck', 'audioCheck', 'micCheck']
+
     @staticmethod
     def before_next_page(player, timeout_happened):
         # find team goal agreement
@@ -64,22 +72,38 @@ class AudioVideoCheck(Page):
                     # save name and project of goals with agreement
                     for j, goal in enumerate(goals[1:]):
                         if goal != 0:
-                            goals_string = goals_string + 'for ' + goals[0] + ' fits ' + projects[j] + ' best and '
+                            goals_string = f'{goals_string} <b>{goals[0]}: {projects[j]}</b> <br>'
 
             if goals_string == '':
-                goals_string = 'The Team doesn\'t agree in any points yet. Please discuss them.'
+                goals_string = 'there was no agreement in any points yet.'
             else:
-                goals_string = 'Your team agreed that ' + goals_string[:-5] + '.'
+                goals_string = 'your team agreed to the following:<br><br><p>' + goals_string[:-5] + '</p>'
             player.session.goals_string = goals_string
-            print(player.session.goals_string)
+            # print(player.session.goals_string)
 
-            print('original: ', player.session.goal_matrix)
-            print('Team vorher: ', player.session.team_goal_matrix)
+            # print('original: ', player.session.goal_matrix)
+            # print('Team vorher: ', player.session.team_goal_matrix)
             player.session.team_goal_matrix = [[inner_list[0]] + [bool(value) for value in inner_list[1:]] for inner_list in player.session.team_goal_matrix]
-            print('Team vorher: ', player.session.team_goal_matrix)
+            # print('Team vorher: ', player.session.team_goal_matrix)
 
+            # initialize lists for average of team goals inside a dict
+            player.session.team_goals_avg = {}
+            for i in range(5):
+                player.session.team_goals_avg[player.session.goals[i]] = []
+
+            # print(player.session.team_goals_avg)
+            # fill lists with ratings of all players
+            for p in player.subsession.get_players():
+                for i in range(5):
+                    # dict_team_goals[list_goal_names[goal_name]].append(dict_goal_rankings[list_goal_names[goal_name]])
+                    p.session.team_goals_avg[p.session.goals[i]].append(p.participant.goal_ranking[p.session.goals[i]])
+
+            # overwrite the list inside the dict with the average of the players
+            for i in range(5):
+                player.session.team_goals_avg[player.session.goals[i]] = float(np.mean(np.array(player.session.team_goals_avg[player.session.goals[i]])))
 
 class WaitCheckComplete(WaitPage):
+    # wait for all players, because variables above are just computed for player1
     pass
 
 
