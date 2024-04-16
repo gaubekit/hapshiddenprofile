@@ -1,8 +1,8 @@
 """
 Notes:
     - WOOP = Wish Outcome Obstacle Plan
-    - All players do the WOOP-Task Individual Level
-      Note: For Wish: Select two out of 8 (at the moment)
+    - Players proceeding the WOOP-Task, where the Wish is the most important goal
+      Note: there is no specification about the innovative projects at this point
 
 is Needed in Version:
     - impactGoalSetting (goal-setting, normal jitsi)
@@ -48,7 +48,7 @@ class WoopTask(Page):
 
 
 class FinishWoop(WaitPage):
-   pass
+    pass
 
 
 page_sequence = [WoopTask, FinishWoop]

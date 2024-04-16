@@ -12,7 +12,7 @@ is Needed in Version:
 
 
 from otree.api import *
-import random
+# import random
 
 
 doc = """
@@ -24,7 +24,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'Hiddenprofile'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    SEED = random.randint(1, 500)
+    # SEED = random.randint(1, 500)  # Note: was used in earlier versions
 
     # INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue', 'new_tech', 'social_benefits']
     #
@@ -40,6 +40,7 @@ class C(BaseConstants):
     UNIQUE_INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue']
     SHARED_INFORMATION_KEYS = ['new_tech', 'social_benefits']
     GOALS = UNIQUE_INFORMATION_KEYS+SHARED_INFORMATION_KEYS
+
 
 class Subsession(BaseSubsession):
     pass
@@ -89,7 +90,9 @@ class ProjectPitch(Page):
 
         # Note -> could be used like: player.session.peaces_of_information[0][player.participant.shared_information]
 
+
 class ResultsWaitPage(WaitPage):
-     pass
+    pass
+
 
 page_sequence = [ProjectPitch]

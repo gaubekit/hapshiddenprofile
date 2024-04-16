@@ -1,23 +1,18 @@
 """
 Notes:
     - meetingA:
-        ° jitsi in template
+        ° jitsi Meeting
         ° box: showing individual information in separated Box -> via session and participant fields
-        ° Team Choice Field with Timer #TODO Timer
-        °
-    - MeetingB (same as MeetingA instead of):
-        ° access individual Project-Goal ranking TODO shift this to Premeeting
-        ° compute joint project ranking  TODO shift this to Premeeting
-        ° decision matrix goal/Project QUESTION: Same in InterventionB ??
-        ° points without agreement has to be discussed in a first step TODO shift this to Premeeting
+        ° Team Choice Field with Timer and Agreement-Button  # TODO: Timer
 
+    - MeetingB (same as MeetingA but also consists of):
+        ° Project-Criteria Matrix
+        ° Information about own goals
 
-    - MeetingC (same as MeetingB instead of):
-        ° Access ranked goals for spidergraph
-        ° provide goal-ranking-information of all players for template/js
-        ° show spidergraph
+    - MeetingC (same as MeetingB but also consists of):
+        ° adaptation: Visualization of overall Team Goal in a Spider Graph
 
-is Needed in Version:
+Meeting (this app) C is needed in Version:
     - impactGoalsSharedSetting (goal-setting, jitsi with intervention)
 """
 

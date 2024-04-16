@@ -1,10 +1,12 @@
 """
 Notes:
-    - access goals via participant
-    - select common goals
-    - weight common goals
+    - provide possible goals to players
+    - player choice: most important goal for unspecific innovative projects
+    - player goal rating, necessary for overall team goal
+    - player could only continue to the next page if there is a goal chosen and a maximum of 18 points allocated
 
 is Needed in Version:
+    - impactGoalSetting (goal-setting, normal jitsi)
     - impactGoalsSharedSetting (goal-setting, jitsi with intervention)
 """
 

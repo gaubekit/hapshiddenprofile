@@ -1,8 +1,8 @@
 """
 Notes:
     - Giving general Information about experiment
-    - collecting basic Data (individual/player-level) for all sessions -> participant
-    -
+    - collecting demographic data
+    - set some participant and session variables, which are used later on
 
 is Needed in Version:
     - control (no goal-setting, normal jitsi)
@@ -54,7 +54,7 @@ class PreIntroduction(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         """Store information about projects and goals in session variables"""
-        # TODO: If change some goals or project(-infomration), do it here!
+        # TODO: If change some goals or project(-information), do it here!
 
         # initialize predefined goals as session variable
         player.session.goals = [

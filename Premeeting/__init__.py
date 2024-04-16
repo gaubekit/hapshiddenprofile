@@ -1,10 +1,12 @@
 """
 Notes:
     - video and audio check
-    - instruction: preselected -> discuss points without agreement
-    - compute agreement using player.session.goal_matrix -> update var
-    - jitsi meeting in template
+    - compute agreement using player.session.goal_matrix before meeting page
+
+    - prefilled criteria-Project-Matrix TODO: Preselection of checkboxes
+    - jitsi meeting
     - live methode: update table
+    - timer and agreement-button TODO: Timer
 is Needed in Version:
     - impactGoalsSharedSetting (goal-setting, jitsi with intervention)
     - impactGoalSetting (goal-setting, normal jitsi)
@@ -212,7 +214,7 @@ class Discussion(Page):
             return {0: dict(locked=True)}
 
         # check if all players has agreed
-        if player.session.agreements[0] and player.session.agreements[1]:  # player.session.agreements[2] and player.session.agreements[3]:
+        if player.session.agreements[0] and player.session.agreements[1]:  # TODO and player.session.agreements[2] and player.session.agreements[3]:
             # print('BOTH AGREED')
             for i in range(0, 6):
                 if player.session.team_goal_matrix[i][1:] == [False, False, False]:
