@@ -26,10 +26,6 @@ DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = ['goal_ranking',  # stores the goal names as key and the related rating as value
                       'unique_information',  # Store for each player which unique piece of information he has
                       'shared_information',  # store for each player which shared piece of information he has
-                      # TODO: try to replace functionality useing unique_information ect because it is just [f'{ProjectB_}participant.unique_information', f'{ProjectB_}participant.shared_information']
-                      'ProjectA_list',
-                      'ProjectB_list',
-                      'ProjectC_list',
                       ]
 
 SESSION_FIELDS = ['goals',  # setup of all predefined (Intro) goals
@@ -37,9 +33,7 @@ SESSION_FIELDS = ['goals',  # setup of all predefined (Intro) goals
                   'desc_pro_B',  # String describing Project B
                   'desc_pro_C',  # String describing Project C
                   'team_goals_avg',  # new: used for SpiderGraph during jitsi call
-                  'INFORMATION_A',  # dictionary with information of each criterion # TODO shorten (1dict), move to Intro, make keys independet of real information so we could change them
-                  'INFORMATION_B',
-                  'INFORMATION_C',
+                  'peaces_of_information',  # List, stores dictionaries for each project containing criteria information
                   'goal_matrix',  # stores each Project-voting of each player for the criteria
                   'team_goal_matrix',  # deep copy of goal_matrix with binary information about agreement
                   'checkboxes',  # used to keep track of checkboxes in Meeting

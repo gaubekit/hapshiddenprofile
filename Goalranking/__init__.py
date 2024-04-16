@@ -21,7 +21,6 @@ class C(BaseConstants):
     NAME_IN_URL = 'Goalranking'
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
-    SEED = random.randint(1, 500)
 
 
 class Subsession(BaseSubsession):
@@ -56,58 +55,9 @@ class GoalWeighting(Page):
     form_fields = ['first_goal_rank', 'second_goal_rank', 'third_goal_rank',
                    'fourth_goal_rank', 'fifth_goal_rank', 'sixth_goal_rank']
 
-
-
-    # @staticmethod
-    # def vars_for_template(player):
-    #
-    #     # setting a goal_count dict for counting goals mentioned
-    #     goal_counts = {
-    #         'human_resources': 0, 'cost': 0, 'duration': 0, 'revenue': 0,
-    #         'new_tech': 0, 'social_benefits': 0} #, 'goal7': 0, 'goal8': 0}
-    #
-    #     # count how often the goals were mentioned by the participants
-    #     for p in player.subsession.get_players():
-    #         for goal, count in goal_counts.items():
-    #             # goal_counts[goal] += getattr(p, goal)
-    #             goal_counts[goal] += p.participant.goal_list[goal]
-    #
-    #     # separate named and unnamed goals
-    #     goal_list = {goal: count for goal, count in goal_counts.items() if count != 0}
-    #     unnamed_goals = {goal: count for goal, count in goal_counts.items() if count == 0}
-    #
-    #     # chose most mentioned goals
-    #     sorted_goals = sorted(goal_list.items(), key=itemgetter(1), reverse=True)
-    #     chosen_goals = [goal[0] for goal in sorted_goals[:5]]
-    #
-    #     unnamed_goals = [goal for goal in unnamed_goals if goal not in chosen_goals]
-    #
-    #     # add goals by random, if there are less than 5 mentioned
-    #     if len(chosen_goals) < 5:
-    #         short_come = 5 - len(chosen_goals)
-    #         random.seed(C.SEED)
-    #         additional_goals = random.sample(unnamed_goals, short_come)
-    #         chosen_goals.extend(additional_goals)
-    #
-    #     # save chosen goals in session var
-    #     player.session.chosen_goals = chosen_goals
-    #
-    #     player.first_goal_name = chosen_goals[0]
-    #     player.second_goal_name = chosen_goals[1]
-    #     player.third_goal_name = chosen_goals[2]
-    #     player.fourth_goal_name = chosen_goals[3]
-    #     player.fifth_goal_name = chosen_goals[4]
-    #
-    #     return dict(first_goal=chosen_goals[0],
-    #                 second_goal=chosen_goals[1],
-    #                 third_goal=chosen_goals[2],
-    #                 fourth_goal=chosen_goals[3],
-    #                 fifth_goal=chosen_goals[4]
-    #                 )
-
     @staticmethod
     def vars_for_template(player):
-        # set names of goals for formfields
+        # provide names of goals for formfields
         print(player.session.goals)
         player.first_goal_name = player.session.goals[0]
         player.second_goal_name = player.session.goals[1]
@@ -125,7 +75,7 @@ class GoalWeighting(Page):
 
     @staticmethod
     def js_vars(player: Player):
-        # provide names for java
+        # provide names to java, used in spider graph
         return dict(first_goal_js=player.session.goals[0],
                     second_goal_js=player.session.goals[1],
                     third_goal_js=player.session.goals[2],
@@ -133,7 +83,6 @@ class GoalWeighting(Page):
                     fifth_goal_js=player.session.goals[4],
                     sixth_goal_js=player.session.goals[5],
                     )
-
 
     @staticmethod
     def live_method(player, data):
@@ -157,8 +106,8 @@ class GoalWeighting(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
+        """ store the goal-rankings in participant data"""
         participant = player.participant
-        # TODO -> clarify: cause the change "most_important_goal" any errors in followup apps?
         participant.goal_ranking = {'most_important_goal': player.most_important_goal,
                                     player.first_goal_name:  player.first_goal_rank,
                                     player.second_goal_name:  player.second_goal_rank,
@@ -166,18 +115,6 @@ class GoalWeighting(Page):
                                     player.fourth_goal_name:  player.fourth_goal_rank,
                                     player.fifth_goal_name:  player.fifth_goal_rank,
                                     player.sixth_goal_name:  player.sixth_goal_rank}
-
-        # TODO: Delete after deploying, because its initialized in app "Intro"
-        player.session.desc_pro_A = 'Project A is a virtual reality fitness adventure game that combines immersive ' \
-                                    + 'storytelling with physical exercise.<br>' \
-                                    + 'Players embark on epic quests where they must complete fitness ' \
-                                    + 'challenges to progress, making workouts engaging and rewarding.'
-        player.session.desc_pro_B = 'Project B is an AI-powered shopping assistant that uses machine learning'\
-                                    + ' algorithms to analyze user preferences, browsing history, and social media'\
-                                    + ' data to provide personalized product recommendations and styling advice.'
-        player.session.desc_pro_C = 'Project C is a smart home energy management system that integrates AI algorithms'\
-                                    + ', IoT sensors, and user behavior analysis to optimize energy usage, '\
-                                    + 'reduce costs, and minimize environmental impact.'
 
 
 class FinishGoalWeighting(WaitPage):

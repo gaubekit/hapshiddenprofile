@@ -54,7 +54,7 @@ class MeetingC(Page):
     @staticmethod
     def vars_for_template(player):
         """unique_a/b/c and shared_a/b/c provides the Project descriptions as strings"""
-        #print(player.session.goal_matrix)
+        # print(player.session.goal_matrix)
         # TODO: Logic is needed to provide the prefilled matrix
 
         # use this section to reset agreements and initialize choice checkboxes for live methode
@@ -88,23 +88,14 @@ class MeetingC(Page):
                     B6=player.session.team_goal_matrix[5][2],
                     C6=player.session.team_goal_matrix[5][3],
                       # individual project information as strings
-                    unique_a=player.session.INFORMATION_A[player.participant.unique_information],
-                    shared_a=player.session.INFORMATION_A[player.participant.shared_information],
-                    unique_b=player.session.INFORMATION_B[player.participant.unique_information],
-                    shared_b=player.session.INFORMATION_B[player.participant.shared_information],
-                    unique_c=player.session.INFORMATION_C[player.participant.unique_information],
-                    shared_c=player.session.INFORMATION_C[player.participant.shared_information],
+                    unique_a=player.session.peaces_of_information[0][player.participant.unique_information],
+                    shared_a=player.session.peaces_of_information[0][player.participant.shared_information],
+                    unique_b=player.session.peaces_of_information[1][player.participant.unique_information],
+                    shared_b=player.session.peaces_of_information[1][player.participant.shared_information],
+                    unique_c=player.session.peaces_of_information[2][player.participant.unique_information],
+                    shared_c=player.session.peaces_of_information[2][player.participant.shared_information],
                       # individual goal preference
                     most_important_goal=player.participant.goal_ranking['most_important_goal'])
-
-    # TODO -> Note: is no longer necessary in the new version
-    # @staticmethod
-    # def js_vars(player):
-    #     # store rankings of all players for visualization during jitsi-call
-    #     return dict(one=player.session.team_goals[0],  # goal-rating of player1 (list of integers)
-    #                 two=player.session.team_goals[1]  # goal-rating of player2
-    #                 # TODO three=player.session.team_goals[2], four=player.session.team_goals[3]
-    #                 )
 
     @staticmethod
     def js_vars(player):

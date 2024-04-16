@@ -78,20 +78,15 @@ class AudioVideoCheck(Page):
                 goals_string = 'there was no agreement in any points yet.'
             else:
                 goals_string = 'your team agreed to the following:<br><br><p>' + goals_string[:-5] + '</p>'
-            player.session.goals_string = goals_string
-            # print(player.session.goals_string)
 
-            # print('original: ', player.session.goal_matrix)
-            # print('Team vorher: ', player.session.team_goal_matrix)
+            player.session.goals_string = goals_string
             player.session.team_goal_matrix = [[inner_list[0]] + [bool(value) for value in inner_list[1:]] for inner_list in player.session.team_goal_matrix]
-            # print('Team vorher: ', player.session.team_goal_matrix)
 
             # initialize lists for average of team goals inside a dict
             player.session.team_goals_avg = {}
             for i in range(5):
                 player.session.team_goals_avg[player.session.goals[i]] = []
 
-            # print(player.session.team_goals_avg)
             # fill lists with ratings of all players
             for p in player.subsession.get_players():
                 for i in range(5):
@@ -102,6 +97,7 @@ class AudioVideoCheck(Page):
             for i in range(5):
                 player.session.team_goals_avg[player.session.goals[i]] = float(np.mean(np.array(player.session.team_goals_avg[player.session.goals[i]])))
 
+
 class WaitCheckComplete(WaitPage):
     # wait for all players, because variables above are just computed for player1
     pass
@@ -110,11 +106,9 @@ class WaitCheckComplete(WaitPage):
 class Discussion(Page):
     @staticmethod
     def vars_for_template(player):
-        # print("goalmatrix: ", player.session.goal_matrix)
-        # print("team_goal_matrix: ", player.session.team_goal_matrix)
-
         # initialize player.session.agreements for Agree button
-        player.session.agreements = [False, False]  # Booleans for agreement p1, p2, p3 and p4 TODO: [False, False, False, False]
+        # Booleans for agreement p1, p2, p3 and p4 TODO: [False, False, False, False]
+        player.session.agreements = [False, False]
         player.session.agree_count = 0
 
         return dict(
@@ -126,12 +120,12 @@ class Discussion(Page):
             Information5=player.session.team_goal_matrix[4][0],
             Information6=player.session.team_goal_matrix[5][0],
             # individual project information as strings # TODO -> Note: Same as in MeetingC
-            unique_a=player.session.INFORMATION_A[player.participant.unique_information],
-            shared_a=player.session.INFORMATION_A[player.participant.shared_information],
-            unique_b=player.session.INFORMATION_B[player.participant.unique_information],
-            shared_b=player.session.INFORMATION_B[player.participant.shared_information],
-            unique_c=player.session.INFORMATION_C[player.participant.unique_information],
-            shared_c=player.session.INFORMATION_C[player.participant.shared_information])
+            unique_a=player.session.peaces_of_information[0][player.participant.unique_information],
+            shared_a=player.session.peaces_of_information[0][player.participant.shared_information],
+            unique_b=player.session.peaces_of_information[1][player.participant.unique_information],
+            shared_b=player.session.peaces_of_information[1][player.participant.shared_information],
+            unique_c=player.session.peaces_of_information[2][player.participant.unique_information],
+            shared_c=player.session.peaces_of_information[2][player.participant.shared_information])
 
     @staticmethod
     def live_method(player, data):
@@ -187,7 +181,6 @@ class Discussion(Page):
         if data['information'] == f'choice_C{6}_selected':
             player.session.team_goal_matrix[5][1:] = [False, False, True]
 
-
         # return the information of new selection to all players
         if data['information'] in ['choice_A1_selected', 'choice_B1_selected', 'choice_C1_selected',
                                    'choice_A2_selected', 'choice_B2_selected', 'choice_C2_selected',
@@ -199,7 +192,6 @@ class Discussion(Page):
             player.session.agreements[0], player.session.agreements[1] = False, False  # TODO 4 players
             # send the new input to webtemplate of all players
             player.session.agree_count = 0
-            # return {0: dict(checkbox_update=data['information'], agreed=player.session.agree_count)}
             return {0: dict(checkbox_update=data['information'], finished=False, agreed=player.session.agree_count)}
 
         # handle agreement
@@ -235,5 +227,6 @@ class Discussion(Page):
     def before_next_page(player, timeout_happened):
         # TODO: Which variables has to be stored for analysis?
         pass
+
 
 page_sequence = [AudioVideoCheck, WaitCheckComplete, Discussion, ]

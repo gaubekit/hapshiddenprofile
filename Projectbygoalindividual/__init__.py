@@ -68,18 +68,20 @@ class ProjectRating(Page):
 
     @staticmethod
     def get_form_fields(player: Player):
-        return player.participant.ProjectA_list + player.participant.ProjectB_list + player.participant.ProjectC_list
+        return [f'ProjectA_{player.participant.unique_information}', f'ProjectA_{player.participant.shared_information}',
+                f'ProjectB_{player.participant.unique_information}', f'ProjectB_{player.participant.shared_information}',
+                f'ProjectC_{player.participant.unique_information}', f'ProjectC_{player.participant.shared_information}']
 
     @staticmethod
     def vars_for_template(player):
         return dict(unique=player.participant.unique_information,
-                    uniqueA=player.participant.ProjectA_list[0],
-                    uniqueB=player.participant.ProjectB_list[0],
-                    uniqueC=player.participant.ProjectC_list[0],
+                    uniqueA=f'ProjectA_{player.participant.unique_information}',
+                    uniqueB=f'ProjectB_{player.participant.unique_information}',
+                    uniqueC=f'ProjectC_{player.participant.unique_information}',
                     shared=player.participant.shared_information,
-                    sharedA=player.participant.ProjectA_list[1],
-                    sharedB=player.participant.ProjectB_list[1],
-                    sharedC=player.participant.ProjectC_list[1])
+                    sharedA=f'ProjectC_{player.participant.shared_information}',
+                    sharedB=f'ProjectB_{player.participant.shared_information}',
+                    sharedC=f'ProjectC_{player.participant.shared_information}')
 
 
     @staticmethod
