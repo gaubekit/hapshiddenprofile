@@ -7,7 +7,6 @@
     <script src="https://meet.jit.si/external_api.js"></script>
 
     <!-- split the screen into five boxes by using two rows. The first row with two columns and a second row with three-->
-    <!-- TODO: rename/refactor upper_column etc. for more clarity-->
     <style>
         /*I don't know exactly what's this about.. but leave it there for now*/
         * {
@@ -15,51 +14,51 @@
         }
 
         /* first row with two columns 60-40 */
-        .upper_row {
+        .top_row {
             width: 1200px;
         }
-        .upper_column {
+        .columns_top_row {
             float: left;
             height: 479px;
         }
-        .upper_left {
+        .left_column_top_row {
             width: 70%;
         }
-        .upper_right {
+        .right_column_top_row {
             width: 30%;
             display: flex;
             align-items: center;
         }
-        .upper_row:after {
+        .top_row:after {
             content: "";
             display: table;
             clear: both;
         }  /* clear after upper row */
 
         /* second row with three columns 45-15-40 */
-        .lower_row {
+        .bottom_row {
             width: 1200px;
         }
-        .lower_column {
+        .columns_bottom_row {
             float: left;
             height: 330px;
         }
-        .lower_left {
+        .left_column_bottom_row {
             width: 45%;
             overflow: auto;
             padding: 10px;
         }
-        .lower_center {
+        .centered_column_bottom_row {
             width: 15%;
             padding: 10px;
             text-align: center;
         }
-        .lower_right {
+        .right_column_bottom_row {
             width: 40%;
             vertical-align: middle;
             padding: 10px;
         }
-        .lower_row:after {
+        .bottom_row:after {
             content: "";
             display: table;
             clear: both;
@@ -94,24 +93,24 @@
         Please discuss now which of the three projects (see information panel) you would choose as a team.
     </p>
 
-    <!-- show the container and related content of the first row (upper_row) on the page -->
-    <div class="upper_row">
+    <!-- show the container and related content of the first row (top_row) on the page -->
+    <div class="top_row">
         <!--left box for the jitsy video meeting-->
-        <div class="upper_column upper_left" style="background-color: lightgreen;">
+        <div class="columns_top_row left_column_top_row" style="background-color: lightgreen;">
             <div id=meet></div> <!--  Videomeeting, is working :) -->
         </div>
         <!--right box for the spider graph-->
         <!-- do I need the id tag below? -->
-        <div id="radarChartContainer" class="upper_column upper_right" style="border: 2px solid green">
+        <div id="radarChartContainer" class="columns_top_row right_column_top_row" style="border: 2px solid green">
             <canvas id ="myRadarChart"></canvas>
 
         </div>
     </div>
 
-    <!-- show the container and related content of the second row (lower_row) on the page-->
-    <div class="lower_row">
+    <!-- show the container and related content of the second row (bottom_row) on the page-->
+    <div class="bottom_row">
          <!--left box for individual Project information-->
-        <div class="lower_column lower_left" style="background-color: lightyellow;">
+        <div class="columns_bottom_row left_column_bottom_row" style="background-color: lightyellow;">
             <h2>Recap: Individual Project Information</h2>
             <br><u><b>Project A: Virtual Reality Fitness Adventure Game</b></u><br>
             {{session.desc_pro_A}}<br><br>
@@ -129,7 +128,7 @@
             {{shared_c}}<br>
         </div>
          <!--center box for the final choice-->
-        <div id="final_choice"  class="lower_column lower_center" style="background-color: yellow; display: block">
+        <div id="final_choice"  class="columns_bottom_row centered_column_bottom_row" style="background-color: yellow; display: block">
             <h2>Team Choice</h2> <br>
             <input type="checkbox" id="choice_A" onclick="handleCheckbox(this)"> <b> Project A</b><br><br>
 
@@ -141,11 +140,11 @@
             <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: right" >lock in</button>
             <br><br>Agreements: <span id="display_agree_count"></span>
         </div>
-        <div id="final_choice_done"  class="lower_column lower_center" style="background-color: red; display: none">
+        <div id="final_choice_done"  class="columns_bottom_row centered_column_bottom_row" style="background-color: red; display: none">
             <br><br><p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
         </div>
          <!--right box for the Project-Matrix-->
-        <div class="lower_column lower_right" style="background-color: orange;">
+        <div class="columns_bottom_row right_column_bottom_row" style="background-color: orange;">
             <h2>Team Rating</h2>
             The Table below shows your previous decision: TODO visualization
 
