@@ -23,6 +23,10 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
 
+    # TODO: splot of unique and shared information keys shouldn't be hardcoded
+    UNIQUE_INFORMATION_KEYS = ['human_resources', 'cost', 'duration', 'revenue']
+    SHARED_INFORMATION_KEYS = ['new_tech', 'social_benefits']
+
 
 class Subsession(BaseSubsession):
     pass
@@ -45,6 +49,10 @@ class Player(BasePlayer):
         label='Gender',
         widget=widgets.RadioSelectHorizontal
     )
+
+    # basic experiment information
+    unique_information = models.StringField()
+    shared_information = models.StringField()
 
 
 # PAGES
@@ -109,6 +117,23 @@ class PreIntroduction(Page):
             [player.session.goals[4], 0, 0, 0],
             [player.session.goals[5], 0, 0, 0]
         ]
+
+        # split shared and unique information to the players
+        for i, p in enumerate(player.subsession.get_players()):
+            p.unique_information = C.UNIQUE_INFORMATION_KEYS[i]
+
+            p.shared_information = C.SHARED_INFORMATION_KEYS[0]
+            # TODO for 4 players use code below instead of line above
+            # if i % 2 == 0:
+            #     p.shared_information = C.SHARED_INFORMATION_KEYS[0]
+            # else:
+            #     p.shared_information = C.SHARED_INFORMATION_KEYS[1]
+
+        # store unique and shared information in participant data
+        player.participant.unique_information = player.unique_information
+        player.participant.shared_information = player.shared_information
+
+        # Note -> could be used like: player.session.peaces_of_information[0][player.participant.shared_information]
 
 
 class Introduction(Page):
