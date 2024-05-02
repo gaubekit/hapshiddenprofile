@@ -14,7 +14,7 @@ SESSION_CONFIGS = [
         'Intro', 'Goalranking', 'Woop', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingB', 'Outro']),
     # Intervention with GoalSetting/Woop as well as adaptation (Spidergraph)
     dict(name='InterventionC', num_demo_participants=2, app_sequence=[
-        'Intro', 'Goalranking', 'Woop', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingC', 'Outro']),
+        'Intro', 'Goalranking', 'Woop', 'Projectbygoalindividual', 'Premeeting', 'MeetingC', 'Outro']),
 ]
 
 LANGUAGE_CODE = 'en'
