@@ -1,22 +1,3 @@
-"""
-Notes:
-    - meetingA:
-        ° jitsi Meeting
-        ° box: showing individual information in separated Box -> via session and participant fields
-        ° Team Choice Field with Timer and Agreement-Button  # TODO: Timer
-
-    - MeetingB (same as MeetingA but also consists of):
-        ° Project-Criteria Matrix
-        ° Information about own goals
-
-    - MeetingC (same as MeetingB but also consists of):
-        ° adaptation: Visualization of overall Team Goal in a Spider Graph
-
-Meeting (this app) C is needed in Version:
-    - impactGoalsSharedSetting (goal-setting, jitsi with intervention)
-"""
-
-
 from otree.api import *
 
 
@@ -24,11 +5,9 @@ doc = """
 Your app description
 """
 
-# TODO: Update VCC (see weakestlinkgame)
-
 
 class C(BaseConstants):
-    NAME_IN_URL = 'MeetingC'
+    NAME_IN_URL = 'HiddenProfile2C'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
@@ -46,8 +25,7 @@ class Player(BasePlayer):
 
 
 # PAGES
-class MeetingC(Page):
-
+class MyPage(Page):
     @staticmethod
     def vars_for_template(player):
         """unique_a/b/c and shared_a/b/c provides the Project descriptions as strings"""
@@ -55,44 +33,45 @@ class MeetingC(Page):
         # TODO: Logic is needed to provide the prefilled matrix
 
         # use this section to reset agreements and initialize choice checkboxes for live methode
-        player.session.agreements = [False, False]  # Booleans for agreement p1, p2, p3 and p4 TODO: [False, False, False, False]
+        player.session.agreements = [False,
+                                     False]  # Booleans for agreement p1, p2, p3 and p4 TODO: [False, False, False, False]
         player.session.checkboxes = [False, False, False]  # Booleans for checkboxes choice_A, choice_B and choice_c
         player.session.agree_count = 0
 
         return dict(  # Project Information
-                    Information1=player.session.team_goal_matrix[0][0],
-                    A1=player.session.team_goal_matrix[0][1],
-                    B1=player.session.team_goal_matrix[0][2],
-                    C1=player.session.team_goal_matrix[0][3],
-                    Information2=player.session.team_goal_matrix[1][0],
-                    A2=player.session.team_goal_matrix[1][1],
-                    B2=player.session.team_goal_matrix[1][2],
-                    C2=player.session.team_goal_matrix[1][3],
-                    Information3=player.session.team_goal_matrix[2][0],
-                    A3=player.session.team_goal_matrix[2][1],
-                    B3=player.session.team_goal_matrix[2][2],
-                    C3=player.session.team_goal_matrix[2][3],
-                    Information4=player.session.team_goal_matrix[3][0],
-                    A4=player.session.team_goal_matrix[3][1],
-                    B4=player.session.team_goal_matrix[3][2],
-                    C4=player.session.team_goal_matrix[3][3],
-                    Information5=player.session.team_goal_matrix[4][0],
-                    A5=player.session.team_goal_matrix[4][1],
-                    B5=player.session.team_goal_matrix[4][2],
-                    C5=player.session.team_goal_matrix[4][3],
-                    Information6=player.session.team_goal_matrix[5][0],
-                    A6=player.session.team_goal_matrix[5][1],
-                    B6=player.session.team_goal_matrix[5][2],
-                    C6=player.session.team_goal_matrix[5][3],
-                      # individual project information as strings
-                    unique_a=player.session.peaces_of_information[0][player.participant.unique_information],
-                    shared_a=player.session.peaces_of_information[0][player.participant.shared_information],
-                    unique_b=player.session.peaces_of_information[1][player.participant.unique_information],
-                    shared_b=player.session.peaces_of_information[1][player.participant.shared_information],
-                    unique_c=player.session.peaces_of_information[2][player.participant.unique_information],
-                    shared_c=player.session.peaces_of_information[2][player.participant.shared_information],
-                      # individual goal preference
-                    most_important_goal=player.participant.goal_ranking['most_important_goal'])
+            Information1=player.session.team_goal_matrix[0][0],
+            A1=player.session.team_goal_matrix[0][1],
+            B1=player.session.team_goal_matrix[0][2],
+            C1=player.session.team_goal_matrix[0][3],
+            Information2=player.session.team_goal_matrix[1][0],
+            A2=player.session.team_goal_matrix[1][1],
+            B2=player.session.team_goal_matrix[1][2],
+            C2=player.session.team_goal_matrix[1][3],
+            Information3=player.session.team_goal_matrix[2][0],
+            A3=player.session.team_goal_matrix[2][1],
+            B3=player.session.team_goal_matrix[2][2],
+            C3=player.session.team_goal_matrix[2][3],
+            Information4=player.session.team_goal_matrix[3][0],
+            A4=player.session.team_goal_matrix[3][1],
+            B4=player.session.team_goal_matrix[3][2],
+            C4=player.session.team_goal_matrix[3][3],
+            Information5=player.session.team_goal_matrix[4][0],
+            A5=player.session.team_goal_matrix[4][1],
+            B5=player.session.team_goal_matrix[4][2],
+            C5=player.session.team_goal_matrix[4][3],
+            Information6=player.session.team_goal_matrix[5][0],
+            A6=player.session.team_goal_matrix[5][1],
+            B6=player.session.team_goal_matrix[5][2],
+            C6=player.session.team_goal_matrix[5][3],
+            # individual project information as strings
+            unique_a=player.session.peaces_of_information[0][player.participant.unique_information],
+            shared_a=player.session.peaces_of_information[0][player.participant.shared_information],
+            unique_b=player.session.peaces_of_information[1][player.participant.unique_information],
+            shared_b=player.session.peaces_of_information[1][player.participant.shared_information],
+            unique_c=player.session.peaces_of_information[2][player.participant.unique_information],
+            shared_c=player.session.peaces_of_information[2][player.participant.shared_information],
+            # individual goal preference
+            most_important_goal=player.participant.goal_ranking['most_important_goal'])
 
     @staticmethod
     def js_vars(player):
@@ -142,7 +121,8 @@ class MeetingC(Page):
             return {0: dict(locked=True)}
 
         # check if all players has agreed
-        if player.session.agreements[0] and player.session.agreements[1]:  # player.session.agreements[2] and player.session.agreements[3]:
+        if player.session.agreements[0] and player.session.agreements[
+            1]:  # player.session.agreements[2] and player.session.agreements[3]:
             if player.session.checkboxes == [False, False, False]:
                 return {0: dict(finished=False, agreed=player.session.agree_count)}
             else:
@@ -163,4 +143,12 @@ class MeetingC(Page):
             player.final_choice = "Project C"
 
 
-page_sequence = [MeetingC,]
+class ResultsWaitPage(WaitPage):
+    pass
+
+
+class Results(Page):
+    pass
+
+
+page_sequence = [MyPage]

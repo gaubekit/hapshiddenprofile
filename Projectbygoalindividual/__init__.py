@@ -16,6 +16,7 @@ is Needed in Version:
 
 from otree.api import *
 import copy
+import numpy as np
 
 
 doc = """
@@ -143,13 +144,64 @@ class ProjectRating(Page):
 
         # deep copy of goal_matrix for further manipulation (find agreement in voting)
         player.session.team_goal_matrix = copy.deepcopy(player.session.goal_matrix)
-        #print('team goals:', player.session.team_goals)
-        print('goal_matrix:', player.session.goal_matrix)
-        print('team_goal_matrix:', player.session.team_goal_matrix)
+
+        # print('goal_matrix:', player.session.goal_matrix)
+        # print('team_goal_matrix:', player.session.team_goal_matrix)
 
 
-class ResultsWaitPage(WaitPage):
-    pass
+class ProjectWaitPage(WaitPage):
+    @staticmethod
+    def after_all_players_arrive(group):
+        """Calculate prefilled criteria-project-matrix"""
+
+        # Note: Process just for one player, because if u process team_goal_matrix twice there will be a bias
+        p_1 = group.get_players()[0]
+
+        # find team goal agreement
+        projects = {0: 'Project A', 1: 'Project B', 2: 'Project C'}
+        goals_string = ''
+
+        for goals in p_1.session.team_goal_matrix:
+
+            i = 0
+            for goal in goals[1:]:
+                if goal == 0:
+                    i += 1
+
+            if i != 2:
+                # set not agreed goals to 0, 0, 0
+                goals[1], goals[2], goals[3] = 0, 0, 0
+            else:
+                # save name and project of goals with agreement
+                for j, goal in enumerate(goals[1:]):
+                    if goal != 0:
+                        goals_string = f'{goals_string} <b>{goals[0]}: {projects[j]}</b> <br>'
+
+        if goals_string == '':
+            goals_string = 'there was no agreement in any points yet.'
+        else:
+            goals_string = 'your team agreed to the following:<br><br><p>' + goals_string[:-5] + '</p>'
+
+        p_1.session.goals_string = goals_string
+        p_1.session.team_goal_matrix = [[inner_list[0]] + [bool(value) for value in inner_list[1:]] for
+                                           inner_list in p_1.session.team_goal_matrix]
+
+        """ calculate overall team goal """  # TODO: i guess it could also be moved to goalranking
+        # initialize lists for average of team goals inside a dict
+        p_1.session.team_goals_avg = {}
+        for i in range(5):
+            p_1.session.team_goals_avg[p_1.session.goals[i]] = []
+
+        # fill lists with ratings of all players
+        for p in p_1.subsession.get_players():
+            for i in range(5):
+                # dict_team_goals[list_goal_names[goal_name]].append(dict_goal_rankings[list_goal_names[goal_name]])
+                p.session.team_goals_avg[p.session.goals[i]].append(p.participant.goal_ranking[p.session.goals[i]])
+
+        # overwrite the list inside the dict with the average of the players
+        for i in range(5):
+            p_1.session.team_goals_avg[p_1.session.goals[i]] = float(
+                np.mean(np.array(p_1.session.team_goals_avg[p_1.session.goals[i]])))
 
 
-page_sequence = [ProjectRating, ResultsWaitPage]
+page_sequence = [ProjectRating, ProjectWaitPage]

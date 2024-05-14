@@ -50,6 +50,13 @@ class Player(BasePlayer):
         widget=widgets.RadioSelectHorizontal
     )
 
+    audioCheck = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Audio Output',
+                                     attrs={"invisible": True})
+    micCheck = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Microphone Input',
+                                   attrs={"invisible": True})
+    cameraCheck = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Camera View',
+                                      attrs={"invisible": True})
+
     # basic experiment information
     unique_information = models.StringField()
     shared_information = models.StringField()
@@ -136,6 +143,11 @@ class PreIntroduction(Page):
         # Note -> could be used like: player.session.peaces_of_information[0][player.participant.shared_information]
 
 
+class AudioVideoCheck(Page):
+    form_model = 'player'
+    form_fields = ['cameraCheck', 'audioCheck', 'micCheck']
+
+
 class Introduction(Page):
     pass
 
@@ -149,5 +161,5 @@ class FinishIntro(WaitPage):
     pass
 
 
-page_sequence = [PreIntroduction]
-# page_sequence = [PreIntroduction, Introduction, ParticipantData, FinishIntro]
+page_sequence = [PreIntroduction, AudioVideoCheck]
+# page_sequence = [PreIntroduction, AudioVideoCheck, Introduction, ParticipantData, FinishIntro]

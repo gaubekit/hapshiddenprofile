@@ -1,0 +1,391 @@
+{{ block title }}
+    Page title
+{{ endblock }}
+
+{{ block content }}
+    <!-- load library for RadarChart-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <!-- load library for jitsi Meeting-->
+    <script src="https://meet.jit.si/external_api.js"></script>
+
+     <!-- Page layout -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .outer-container {
+            width: 1300px;
+            height: 800x;
+            display: flex;
+        }
+        /* left container is used for hidden profile*/
+        .left-container {
+            width: 35%;
+            height: 100%;
+            display: flex;
+            overflow: auto;
+            padding: 10px;
+            flex-direction: column;
+        }
+
+        .right-container {
+            width: 65%;
+            height: 100%;
+            padding: 10px;
+        }
+
+        .top-right-subcontainer {
+        height: 50%;
+        overflow: auto;
+        }
+
+
+        .mid-right-subcontainer {
+            height: 30%;
+        }
+        .right-subcontainer-split {
+            width: 49%;
+            height: 100%;
+            display: inline-block;
+        }
+
+        .bottom-right-subcontainer {
+            height: 20%;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        td {
+            width: calc(100% / 8);
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        #display_lock_button {
+            background-color: orange;
+        }
+
+        #agree_button {
+            background-color: green;
+        }
+    </style>
+
+
+    <div class="outer-container">
+
+        <div class="left-container">
+
+            <br><br><u><b>Project A: Virtual Reality Fitness Adventure Game</b></u><br>
+            {{session.desc_pro_A}}<br><br>
+            {{unique_a}}<br>
+            {{shared_a}}<br>
+
+            <br><br><u><b>Project B: AI-Powered Personalized Shopping Assistant</b></u><br>
+            {{session.desc_pro_B}}<br><br>
+            {{unique_b}}<br>
+            {{shared_b}}<br>
+
+            <br><br><u><b>Project C: Smart Home Energy Management System</b></u><br>
+            {{session.desc_pro_C}}<br><br>
+            {{unique_c}}<br>
+            {{shared_c}}<br>
+
+        </div>
+
+        <div class="right-container">
+            <!-- right top VCC -->
+            <div class="top-right-subcontainer" style="background-color: yellow;">
+                <div id=meet></div>
+
+
+
+            </div>
+
+            <!-- right mid matrix + spider graph -->
+
+            <div class="mid-right-subcontainer" style="">
+                <div class="right-subcontainer-split" style="">
+
+                    <!--Table containing the completed project-matrix-->
+                    <table border="1">
+                        <tr>
+                            <td> </td>
+                            <td> Project A</td>
+                            <td> Project B</td>
+                            <td> Project C</td>
+                        </tr>
+                        <tr>
+                            <td> {{Information1}} </td>
+                            <td> {{A1}} </td>
+                            <td> {{B1}} </td>
+                            <td> {{C1}} </td>
+                        </tr>
+                         <tr>
+                            <td> {{Information2}} </td>
+                            <td> {{A2}} </td>
+                            <td> {{B2}} </td>
+                            <td> {{C2}} </td>
+                        </tr>
+                        <tr>
+                            <td> {{Information3}} </td>
+                            <td> {{A3}} </td>
+                            <td> {{B3}} </td>
+                            <td> {{C3}} </td>
+                        </tr>
+                        <tr>
+                            <td> {{Information4}} </td>
+                            <td> {{A4}} </td>
+                            <td> {{B4}} </td>
+                            <td> {{C4}} </td>
+                        </tr>
+                        <tr>
+                            <td> {{Information5}} </td>
+                            <td> {{A5}} </td>
+                            <td> {{B5}} </td>
+                            <td> {{C5}} </td>
+                        </tr>
+                        <tr>
+                            <td> {{Information6}} </td>
+                            <td> {{A6}} </td>
+                            <td> {{B6}} </td>
+                            <td> {{C6}} </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div id="radarChartContainer" class="right-subcontainer-split" style="">
+                    <canvas id ="myRadarChart"></canvas>
+                </div>
+            </div>
+
+
+            <div id="final_choice"  class="mid-right-subcontainer" style="background-color: yellow; display: block">
+                <h2>Team Choice</h2>
+                <input type="checkbox" id="choice_A" onclick="handleCheckbox(this)"> <b> Project A</b>
+
+                <input type="checkbox" id="choice_B" onclick="handleCheckbox(this)"> <b> Project B</b>
+
+                <input type="checkbox" id="choice_C" onclick="handleCheckbox(this)"> <b> Project C</b><br>
+
+                <button id="agree_button" type="button" class="btn btn-primary" onclick="sendAgreement()" style="display: inline-block; float: left">I agree</button>
+                <button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: right" >lock in</button>
+                <br><br>Agreements: <span id="display_agree_count"></span>
+            </div>
+            <div id="final_choice_done"  class="mid-right-subcontainer" style="background-color: red; display: none">
+                <br><br><p>The final Choice was made and other players left the page. You are not allowed to make further changes</p>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Show the next button only when there is agreement -->
+    <div id="display_next_button" style="display: none"> {{ next_button }} </div>
+
+
+    <!-- Script for Team Choice -->
+    <script>
+        // function to handle the checkboxes
+        function handleCheckbox(clickedCheckbox) {
+            const checkboxes = ["choice_A", "choice_B", "choice_C"];
+            // make sure, that there is just one checkbox selected
+            checkboxes.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            // send checkbox information zu otree
+            if (clickedCheckbox.id === "choice_A") {
+                liveSend({'information': 'choice_A_selected'});
+            } else if (clickedCheckbox.id === "choice_B") {
+                liveSend({'information': 'choice_B_selected'});
+            } else if (clickedCheckbox.id === "choice_C") {
+                liveSend({'information': 'choice_C_selected'});
+            }
+        }
+
+        // function to update the checkboxes for the other players, called in liveRecv
+        function liveUpdateCheckbox(new_setup) {
+            const [choiceA, choiceB, choiceC] = new_setup;
+            document.getElementById("choice_A").checked = choiceA;
+            document.getElementById("choice_B").checked = choiceB;
+            document.getElementById("choice_C").checked = choiceC;
+        }
+
+        // Agreement button: send information to oTree if player1 agrees
+        {% if player.id_in_group == 1 %}
+            function sendAgreement() {
+                liveSend({'information': 'p1_agreed'});
+            }
+       // Agreement button: send information to oTree if player2 agrees
+        {% elif player.id_in_group == 2 %}
+            function sendAgreement() {
+                liveSend({'information': 'p2_agreed'});
+            }
+         // TODO: add player 3 and 4
+        {% endif%}
+
+        // hiding the choice field if one of the players click on next
+        function lock_in() {
+            liveSend({'information': 'locked'});
+        }
+
+        // function receives Information from oTrees Python part
+        function liveRecv(data) {
+            const upd_agreement = data.agreed;
+            document.getElementById("display_agree_count").textContent = upd_agreement;
+
+            // Make sure that the lock in button is just displayed, if there is agreement
+            if (data.finished) {
+                document.getElementById("display_lock_button").style.display = "inline-block";
+                document.getElementById("agree_button").style.display = "none";
+            }
+            if (data.finished == false) {
+                document.getElementById("display_lock_button").style.display = "none";
+                document.getElementById("agree_button").style.display = "inline-block";
+            }
+
+            // update checkboxes
+            if  (data.checkbox_update == "choice_A_selected") {
+                liveUpdateCheckbox([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B_selected") {
+                liveUpdateCheckbox([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C_selected") {
+                liveUpdateCheckbox([false, false, true]);
+            }
+
+            // hide checkboxes and show next button for all players if locked button is clicked by any player
+            if (data.locked == true) {
+                document.getElementById("final_choice_done").style.display = "block";
+                document.getElementById("final_choice").style.display = "none";
+                document.getElementById("display_next_button").style.display = "block";
+            }
+        }
+        // when page loaded send nothing.. but could be used if some indiviudal reloads the page to set something
+        //document.addEventListener('DOMContentLoaded', (event) => {
+        //
+        //    liveSend({});
+        //});
+
+    </script>
+
+    <!-- Script for Radar Chart -->
+    <script>
+        // function for the radar chart
+        function createRadarChart(total) {
+            let ctx = document.getElementById('myRadarChart').getContext('2d');
+            let myRadarChart = new Chart(ctx, {
+                type: 'radar',
+             data: {
+                    labels: {{session.goals}},
+                    datasets: [{
+                        label: 'averaged goals for the Team',
+                        data: js_vars.team_goals,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2
+                    },
+                    ]
+                },
+
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 5
+                        }
+                    }
+                }
+            });
+        }
+
+        // initialize RadaChart aka Spidergraph
+        createRadarChart(5);
+    </script>
+
+    <!--Script for Jitsi Meeting -->
+    <!-- Version from 2024-04-03 Anuja's Weakest Link Game (just copy paste)-->
+    <script>
+        const domain = "meet.jit.si"; //Here goes your domain where the meeting takes place.
+        var isStreamOn = false; //This is a variable I've defined to use later.
+        const options = {
+            roomName: "Weakest Link Game", //This is the name of the room.
+            width: 840,                //Well, you know.
+            height: 480,                //Same as above, just vertical.
+            parentNode: document.querySelector('#meet'), //Now, you declare here which element should parent your stream.
+            configOverwrite: {}, //You can turn on or off config elements with this prop.
+            interfaceConfigOverwrite: { TOOLBAR_BUTTONS: [] },  //You can turn on or off interface elements with this prop. check https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe for details
+            jwt: 'yourtokenhere' //Here, you should pass a JWT token for authorization purposes. If you're using jitsi-token-moderation or simiar, make sure the token you pass can start streams
+        }
+        const api = new JitsiMeetExternalAPI(domain, options); //This is where the iframe is actually constructed
+        //The function below turns on the Tile View everytime a participant joins. Practically it makes Tile View the default mode
+        api.addEventListener(`videoConferenceJoined`, () => {
+            const listener = ({ enabled }) => {
+                api.removeEventListener(`tileViewChanged`, listener);
+
+                if (!enabled) {
+                    api.executeCommand(`toggleTileView`);
+                }
+            };
+        });
+
+
+
+        function streamHandler() {
+            try {
+                if (!isStreamOn) {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Starting streaming...";
+                    //The function below starts the stream or recording, according to its "mode"
+                    api.executeCommand('startRecording', {
+                        mode: 'stream', //recording mode, either `file` or `stream`.
+                        rtmpStreamKey: '', //This where you *should* put your favoured rtmp stream server along with your key, like "rtmp:\/\/some.address/norecord/stream-key"
+                        youtubeStreamKey: 'rtmp:\/\/some.address/norecord/stream-key', //the youtube stream key.
+                    });
+                } else {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Stopping streaming...";
+                    //The function below stops the stream or recording, according to the string you pass. Official guide shows an object, while it should be a string
+                    api.executeCommand('stopRecording', 'stream');
+                }
+
+            }
+            catch (e){
+                if (isStreamOn){
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while stopping stream.";
+                    console.log("Exception while stopping stream.", e);
+                }else{
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while starting stream.";
+                    console.log("Exception while starting stream.", e);
+
+                }
+                this.isStreamOn = false;
+             }
+        };
+            //This part doesn't work without making some changes to the code as per this; https://github.com/team-ai-repo/jitsi-meet/pull/4/files
+            api.addEventListener("recordingStarted", () => {
+                document.getElementById("stream-btn").innerHTML="Stop Streaming";
+                document.getElementById("streamingResponseMsg").innerHTML = "Stream is on";
+                this.isStreamOn = true;
+                console.log("Example Stream On", this.isStreamOn);
+            });
+
+            api.addEventListener("recordingStopped", () => {
+            document.getElementById("stream-btn").innerHTML="Start Streaming";
+            document.getElementById("streamingResponseMsg").innerHTML = "Stream is off";
+            console.log("Example Stream Off", this.isStreamOn);
+            this.isStreamOn = false;
+        });
+
+
+    </script>
+
+{{ endblock }}

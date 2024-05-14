@@ -1,14 +1,54 @@
-{{ block title }}
-    Questionnaire End
-{{ endblock }}
 {{ block content }}
 
-    PLACEHOLDER Questionnaire
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-5" style="background-color: #f8f9fa;">
+        <div class="card-body">
 
-    <br><br>
-    Evaluation WOOP, ..., GoalAlignment, Feedback
+           <p class="card-text text-center">
+              <b>Thinking about the virtual collaboration. How strong do you agree to the following statements?</b><br>
+                <table class="table" style="text-align: center;  vertical-align: middle;">
+                    <tr>
+                        <td style="width: 30%;"></td>
+                        <td style="width: 10%;">Not at all</td>
+                        <td style="width: 10%;"></td>
+                        <td style="width: 10%;"></td>
+                        <td style="width: 10%;"></td>
+                        <td style="width: 10%;"></td>
+                        <td style="width: 10%;"></td>
+                        <td style="width: 10%;">Completely</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 30%;"></td>
+                        <td style="width: 10%;">- - -</td>
+                        <td style="width: 10%;">- -</td>
+                        <td style="width: 10%;">-</td>
+                        <td style="width: 10%;">o</td>
+                        <td style="width: 10%;">+</td>
+                        <td style="width: 10%;">+ +</td>
+                        <td style="width: 10%;">+ + +</td>
+                    </tr>
+                    {{ for field in form }}
 
-    {{ formfields }}
-    {{ next_button }}
+                    <tr>
+                            <td style="text-align: left;">{{ field.label }}</td>
+                            {{ for choice in field }}
+                                <td>{{ choice }}</td>
+                            {{ endfor }}
+                        </tr>
+                    {{ endfor }}
+                </table>
+          <br>
 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+{{next_button}}
 {{ endblock }}

@@ -8,13 +8,13 @@ SESSION_CONFIGS = [
     dict(name='Pilot', num_demo_participants=20, app_sequence=['Pilot']),
     # Control Group without GoalSetting/WOOP and adaptation
     dict(name='InterventionA', num_demo_participants=2, app_sequence=[   # TODO
-        'Intro', 'Hiddenprofile', 'MeetingA', 'Outro']),
+        'Intro', 'MeetingA', 'Outro']),
     # Intervention with GoalSetting/WOOP
     dict(name='InterventionB', num_demo_participants=2, app_sequence=[  # TODO
-        'Intro', 'Goalranking', 'Woop', 'Hiddenprofile', 'Projectbygoalindividual', 'Premeeting', 'MeetingB', 'Outro']),
+        'Intro', 'Goalranking', 'Woop', 'Projectbygoalindividual', 'Premeeting', 'MeetingB', 'Outro']),
     # Intervention with GoalSetting/Woop as well as adaptation (Spidergraph)
     dict(name='InterventionC', num_demo_participants=2, app_sequence=[
-        'Intro', 'Goalranking', 'Woop', 'Projectbygoalindividual', 'Premeeting', 'MeetingC', 'Outro']),
+        'Intro', 'Goalranking', 'Woop', 'HiddenProfile1', 'HiddenProfile2C', 'Outro']),
 ]
 
 LANGUAGE_CODE = 'en'
@@ -39,7 +39,7 @@ SESSION_FIELDS = ['goals',  # setup of all predefined (Intro) goals
                   'checkboxes',  # used to keep track of checkboxes in Meeting
                   'agreements',  # used to keep track of agreements in Meeting
                   'agree_count',  # count how many players has actually agreed to a decision
-                  # TODO actually 'goals_string' it stores the Goals at strings, in future Version
+                  # TODO: actually 'goals_string' stores the Goals at strings, in future Version
                   #      this information should be used to prefill the matrix
                   'goals_string'  # save the pre-agreed goals
                   ]

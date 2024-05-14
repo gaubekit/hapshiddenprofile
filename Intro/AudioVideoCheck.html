@@ -1,14 +1,9 @@
-{{ block title }}
-   Equipment Check
-{{ endblock }}
+{{ extends 'global/Page.html' }}
+{{ block title }}Equipment Check{{ endblock }}
 
 {{ block content }}
 
-    Befor your enter the next Page, please check your audio and video<br><br>
-    <b>TODO: MAKE MICROPHONE CHECK WORK</b><br><br>
-
-
-    <style>
+<style>
     .my-box {
         border: 1px solid #ccc;
         padding: 10px;
@@ -38,14 +33,12 @@
       .checkbox {
             margin-left: auto;
       }
-    </style>
+</style>
 
     <div class="my-box">
     <h5>Audio Output Check</h5>
      <audio controls>
         <source src="{% static 'ping.mpeg' %}" type="audio/mpeg">
-
-
         Your browser does not support the audio element.
     </audio>
      <p>How many times did you hear the sound?</p>
@@ -60,8 +53,9 @@
             <option value="3">3</option>
             <option value="4">4</option>
         </select>
-       <input type="checkbox" class="checkbox" id="audioCheckbox" disabled
-           readonly value="{{ player.audioCheck}}" >Audio works</input>
+       <input type="checkbox" class="checkbox" id="audioCheckbox" disabled name="audioCheck"
+           readonly>Audio works</input>
+            <input id="hiddenAudioCheck" type="hidden" name="audioCheck" value="0"/>
     </div>
 
 
@@ -71,18 +65,16 @@
             const checkbox = document.getElementById("audioCheckbox");
             if (dropdown.value === "3") {
                 checkbox.checked = true;
-                const radio = document.getElementById('audioCheck');
-
-                forminputs.audioCheck.value = 1;
+                const hiddenAudioCheck = document.getElementById('hiddenAudioCheck');
+                hiddenAudioCheck.value = 1;
             } else {
                 checkbox.checked = false;
             }
         }
     </script>
-
     <hr>
     <h5>Microphone Decibel Level</h5>
-    <p>Click the button below and say something to check your microphone:</p>
+    <p>Click the button below and say something to check your microphone:</p>    
     <!-- Microphone Test -->
     <button  type="button"  onclick="checkMicrophone()">Check Microphone</button>
     <!-- Decibel Level Meter -->
@@ -90,23 +82,25 @@
        <div id="level"></div>
     </div>
      <!-- Checkbox gets automatically ticked if Mic is working -->
-    <input class="checkbox" type="checkbox" id="micCheckbox"
-           disabled readonly value="{{player.micCheck}}">Microphone works</input>
+    <input class="checkbox" type="checkbox" id="micCheckbox" name ="micCheck"
+           disabled readonly>Microphone works</input>
+        <input id="hiddenMicCheck" type="hidden" name="micCheck" value="0"/>
     <hr>
      <!-- Checkbox needs to be ticked explicitly -->
     <h5>Camera Test</h5>
     <button  type="button" id="startButton">Start Camera</button>
-    <input type="checkbox" id="stopCheckbox" disabled value="{{ player.cameraCheck}}"> Camera Works </input>
+    <input type="checkbox" id="stopCheckbox" disabled > Camera Works </input>
+    <input id="hiddenCameraCheck" type="hidden" name="cameraCheck" value="0"/>
     <input type="checkbox" id="stopCamera"> Stop Camera </input>
     <div id="videoContainer"></div>
-
+    
     <button id="nextButton" hidden >Next</button>
 
     <!-- Display the warning message -->
     <p id="warningMessage" hidden>Please leave the experiment now.</p>
 
     <!-- Scripts for audio play -->
-    <!-- Scripts for checking microphone and display decibel meter-->
+     <!-- Scripts for checking microphone and display decibel meter-->
     <script>
         async function checkMicrophone() {
         try {
@@ -118,8 +112,6 @@
             alert('Microphone not detected or not working. Please try again.');
             }
         }
-
-        // microphone check
         function startDecibelMeter(stream) {
             const audioContext = new AudioContext();
             const source = audioContext.createMediaStreamSource(stream);
@@ -137,8 +129,8 @@
                 if (meterWidth > 10) {
                     micCheckbox.checked = true;
                     micCheckbox.disabled=true;
-                    const radio = document.getElementById('micCheck');
-                    forminputs.micCheck.value = 1;
+                    const hiddenMicCheck = document.getElementById('hiddenMicCheck');
+                    hiddenMicCheck.value = 1;
                   }
                 document.querySelector('#level').style.width = `${meterWidth}%`;
                 requestAnimationFrame(updateMeter);
@@ -146,7 +138,7 @@
             updateMeter();
         }
     </script>
-    <!-- Video Check -->
+    
     <script>
         const startButton = document.getElementById('startButton');
         const stopCheckbox = document.getElementById('stopCheckbox');
@@ -162,7 +154,8 @@
                 videoContainer.appendChild(video);
                 startButton.disabled = true;
                 stopCheckbox.checked = true;
-                forminputs.cameraCheck.value = 1;
+                const hiddenCameraCheck = document.getElementById('hiddenCameraCheck');
+                hiddenCameraCheck.value = 1;
             } catch (error) {
                 console.error('Error accessing camera:', error);
             }
@@ -172,7 +165,7 @@
                 stream.getTracks().forEach(track => track.stop());
                 videoContainer.innerHTML = '';
                 startButton.disabled = true;
-                const radio = document.getElementById('cameraCheck');
+
             } else {
                 startButton.disabled = false;
             }
@@ -182,17 +175,5 @@
     </div>
     <br/><br/>
 
-    {{formfields}}
-    {{ next_button }}
-    <br><br>
-
-    PLACEHOLDER Introduction to Discussion, just Notes<br><br>
-    By clicking the Agree button, you confirm that you agree with the current selection.
-    If there are any changes after the agreement, you have to agree again.
-    The amount of total agreements is shown below. After all players have agreed the lock in button will displayed.
-    If any of the Participants confirm the lock-in button, there are no further changes possible.
-
-
-
-
+{{next_button}}
 {{ endblock }}

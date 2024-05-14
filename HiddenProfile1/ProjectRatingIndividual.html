@@ -1,0 +1,104 @@
+{{ block title }}Project Rating{{ endblock }}
+
+{{ block content }}
+
+    <!-- Page layout -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .outer-container {
+            width: 1300px;
+            height: 800x;
+            display: flex;
+        }
+
+        .left-container {
+            width: 35%;
+            height: 100%;
+            display: flex;
+            overflow: auto;
+            padding: 10px;
+            flex-direction: column;
+        }
+
+
+
+        .right-container {
+            width: 65%;
+            height: 100%;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        td {
+            width: calc(100% / 8);
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
+
+
+
+     <div class="outer-container">
+
+        <div class="left-container">
+
+            <h2>Project Information</h2>
+
+             <br><u><b>Project A: Virtual Reality Fitness Adventure Game</b></u><br>
+            {{session.desc_pro_A}}<br><br>
+            {{unique_a}}<br>
+            {{shared_a}}<br>
+
+            <br><u><b>Project B: AI-Powered Personalized Shopping Assistant</b></u><br>
+            {{session.desc_pro_B}}<br><br>
+            {{unique_b}}<br>
+            {{shared_b}}<br>
+
+            <br><u><b>Project C: Smart Home Energy Management System</b></u><br>
+            {{session.desc_pro_C}}<br><br>
+            {{unique_c}}<br>
+            {{shared_c}}<br>
+
+        </div>
+
+        <div class="right-container">
+
+            Please decide for each named criteria which Projects fits in your opinion best. You have to choose exactly one Project for each goal.
+            <table border="1">
+                <tr>
+                    <td> </td>
+                    <td> Project A</td>
+                    <td> Project B</td>
+                    <td> Project C</td>
+                </tr>
+                <tr>
+                    <td> {{ unique }} </td>
+                    <td> <input type="checkbox" name="{{ uniqueA }}" value="1"> </td>
+                    <td> <input type="checkbox" name="{{ uniqueB }}" value="1"> </td>
+                    <td> <input type="checkbox" name="{{ uniqueC }}" value="1"> </td>
+                </tr>
+                 <tr>
+                    <td> {{ shared }}</td>
+                    <td> <input type="checkbox" name="{{ sharedA }}" value="1"> </td>
+                    <td> <input type="checkbox" name="{{ sharedB }}" value="1"> </td>
+                    <td> <input type="checkbox" name="{{ sharedC }}" value="1"> </td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+    {{ next_button }}
+
+{{ endblock }}

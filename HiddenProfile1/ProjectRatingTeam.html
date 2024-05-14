@@ -1,0 +1,509 @@
+{{ block title }}
+    Page title
+{{ endblock }}
+
+{{ block content }}
+    <!-- load library for jitsi Meeting-->
+    <script src="https://meet.jit.si/external_api.js"></script>
+
+    <!-- Page layout -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .outer-container {
+            width: 1300px;
+            height: 800x;
+            display: flex;
+        }
+
+        .left-container {
+            width: 35%;
+            height: 100%;
+            display: flex;
+            overflow: auto;
+            padding: 10px;
+            flex-direction: column;
+        }
+
+        .right-container {
+            width: 65%;
+            height: 100%;
+            padding: 10px;
+        }
+
+        .top-right-subcontainer {
+        height: 50%;
+        overflow: auto;
+
+        }
+
+        .mid-right-subcontainer {
+            height: 30%;
+        }
+
+        .bottom-right-subcontainer {
+            height: 20%;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        td {
+            width: calc(100% / 8);
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        #display_lock_button {
+            background-color: orange;
+        }
+
+        #agree_button {
+            background-color: green;
+        }
+    </style>
+
+    Based on your previous ratings, {{session.goals_string}} <br> TODO: Matrix should prefilled with this information
+<br><br>
+
+
+     <div class="outer-container">
+
+        <div class="left-container">
+
+            <br><br><u><b>Project A: Virtual Reality Fitness Adventure Game</b></u><br>
+            {{session.desc_pro_A}}<br><br>
+            {{unique_a}}<br>
+            {{shared_a}}<br>
+
+            <br><br><u><b>Project B: AI-Powered Personalized Shopping Assistant</b></u><br>
+            {{session.desc_pro_B}}<br><br>
+            {{unique_b}}<br>
+            {{shared_b}}<br>
+
+            <br><br><u><b>Project C: Smart Home Energy Management System</b></u><br>
+            {{session.desc_pro_C}}<br><br>
+            {{unique_c}}<br>
+            {{shared_c}}<br>
+
+        </div>
+
+        <div class="right-container">
+            <div id="choice" class="top-right-subcontainer" style="background-color: yellow;">
+                <div id=meet></div>
+            </div>
+
+            <div class="mid-right-subcontainer" style="">
+
+
+                 <!--Table containing the project-matrix-->
+                <table border="1">
+                    <tr>
+                        <td> </td>
+                        <td> Project A</td>
+                        <td> Project B</td>
+                        <td> Project C</td>
+                    </tr>
+                    <tr>
+                        <td> {{Information1}} </td>
+                        <td><input type="checkbox" id="A1" onclick="handleCheckboxInf1(this)"></td>
+                        <td><input type="checkbox" id="B1" onclick="handleCheckboxInf1(this)"></td>
+                        <td><input type="checkbox" id="C1" onclick="handleCheckboxInf1(this)"></td>
+                    </tr>
+                     <tr>
+                        <td> {{Information2}} </td>
+                        <td><input type="checkbox" id="A2" onclick="handleCheckboxInf2(this)"></td>
+                        <td><input type="checkbox" id="B2" onclick="handleCheckboxInf2(this)"></td>
+                        <td><input type="checkbox" id="C2" onclick="handleCheckboxInf2(this)"></td>
+                    </tr>
+                    <tr>
+                        <td> {{Information3}} </td>
+                        <td><input type="checkbox" id="A3" onclick="handleCheckboxInf3(this)"></td>
+                        <td><input type="checkbox" id="B3" onclick="handleCheckboxInf3(this)"></td>
+                        <td><input type="checkbox" id="C3" onclick="handleCheckboxInf3(this)"></td>
+                    </tr>
+                    <tr>
+                        <td> {{Information4}} </td>
+                        <td><input type="checkbox" id="A4" onclick="handleCheckboxInf4(this)"></td>
+                        <td><input type="checkbox" id="B4" onclick="handleCheckboxInf4(this)"></td>
+                        <td><input type="checkbox" id="C4" onclick="handleCheckboxInf4(this)"></td>
+                    </tr>
+                    <tr>
+                        <td> {{Information5}} </td>
+                        <td><input type="checkbox" id="A5" onclick="handleCheckboxInf5(this)"></td>
+                        <td><input type="checkbox" id="B5" onclick="handleCheckboxInf5(this)"></td>
+                        <td><input type="checkbox" id="C5" onclick="handleCheckboxInf5(this)"></td>
+                    </tr>
+                    <tr>
+                        <td> {{Information6}} </td>
+                        <td><input type="checkbox" id="A6" onclick="handleCheckboxInf6(this)"></td>
+                        <td><input type="checkbox" id="B6" onclick="handleCheckboxInf6(this)"></td>
+                        <td><input type="checkbox" id="C6" onclick="handleCheckboxInf6(this)"></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="choice_done"  class="mid-right-subcontainer" style="background-color: red; display: none">
+                <br><br><p>All players agreed to the setup. You are not allowed to make any further changes</p>
+            </div>
+
+            <div class="bottom-right-subcontainer"style="background-color: lightyellow;">
+                    <br>Do you agree with the current goal-matrix set up?<br>
+
+                    <button id="agree_button" type="button" class="btn btn-primary" onclick="sendAgreement()" style="display: inline-block; float: left">I agree</button>
+
+                    <br><br>Agreements to current setup: <span id="display_agree_count"></span>
+                    <br><br><button id="display_lock_button" type="button" class="btn btn-primary" onclick="lock_in()" style="display: none; float: left" >lock in</button>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <br>
+    <!-- Show the next button only when there is agreement -->
+    <div id="display_next_button" style="display: none"> {{ next_button }} </div>
+
+
+    <!-- Script for Team Choice -->
+    <script>
+
+        // functions to handle the checkboxes
+        // INFORMATION 1
+        function handleCheckboxInf1(clickedCheckbox) {
+            const checkboxesInf1 = ["A1", "B1", "C1"];
+            // make sure, that there is just one checkbox selected
+            checkboxesInf1.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            if (clickedCheckbox.id === "A1") {
+                liveSend({'information': 'choice_A1_selected'});
+            } else if (clickedCheckbox.id === "B1") {
+                liveSend({'information': 'choice_B1_selected'});
+            } else if (clickedCheckbox.id === "C1") {
+                liveSend({'information': 'choice_C1_selected'});
+            }
+        }
+        // INFORMATION 2
+        function handleCheckboxInf2(clickedCheckbox) {
+            const checkboxesInf2 = ["A2", "B2", "C2"];
+            // make sure, that there is just one checkbox selected
+            checkboxesInf2.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            if (clickedCheckbox.id === "A2") {
+                liveSend({'information': 'choice_A2_selected'});
+            } else if (clickedCheckbox.id === "B2") {
+                liveSend({'information': 'choice_B2_selected'});
+            } else if (clickedCheckbox.id === "C2") {
+                liveSend({'information': 'choice_C2_selected'});
+            }
+        }
+        // INFORMATION 3
+        function handleCheckboxInf3(clickedCheckbox) {
+            const checkboxesInf3 = ["A3", "B3", "C3"];
+            // make sure, that there is just one checkbox selected
+            checkboxesInf3.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            if (clickedCheckbox.id === "A3") {
+                liveSend({'information': 'choice_A3_selected'});
+            } else if (clickedCheckbox.id === "B3") {
+                liveSend({'information': 'choice_B3_selected'});
+            } else if (clickedCheckbox.id === "C3") {
+                liveSend({'information': 'choice_C3_selected'});
+            }
+        }
+        // INFORMATION 4
+        function handleCheckboxInf4(clickedCheckbox) {
+            const checkboxesInf4 = ["A4", "B4", "C4"];
+            // make sure, that there is just one checkbox selected
+            checkboxesInf4.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            if (clickedCheckbox.id === "A4") {
+                liveSend({'information': 'choice_A4_selected'});
+            } else if (clickedCheckbox.id === "B4") {
+                liveSend({'information': 'choice_B4_selected'});
+            } else if (clickedCheckbox.id === "C4") {
+                liveSend({'information': 'choice_C4_selected'});
+            }
+        }
+        // INFORMATION 5
+        function handleCheckboxInf5(clickedCheckbox) {
+            const checkboxesInf5 = ["A5", "B5", "C5"];
+            // make sure, that there is just one checkbox selected
+            checkboxesInf5.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            if (clickedCheckbox.id === "A5") {
+                liveSend({'information': 'choice_A5_selected'});
+            } else if (clickedCheckbox.id === "B5") {
+                liveSend({'information': 'choice_B5_selected'});
+            } else if (clickedCheckbox.id === "C5") {
+                liveSend({'information': 'choice_C5_selected'});
+            }
+        }
+        // INFORMATION 6
+        function handleCheckboxInf6(clickedCheckbox) {
+            const checkboxesInf6 = ["A6", "B6", "C6"];
+            // make sure, that there is just one checkbox selected
+            checkboxesInf6.forEach(id => {
+                if (id !== clickedCheckbox.id) {
+                    document.getElementById(id).checked = false;
+                }
+            });
+            if (clickedCheckbox.id === "A6") {
+                liveSend({'information': 'choice_A6_selected'});
+            } else if (clickedCheckbox.id === "B6") {
+                liveSend({'information': 'choice_B6_selected'});
+            } else if (clickedCheckbox.id === "C6") {
+                liveSend({'information': 'choice_C6_selected'});
+            }
+        }
+
+        // functions to update the checkboxes for the other players, called in liveRecv
+        // INFORMATION 1
+        function liveUpdateCheckboxInf1(new_setup) {
+            const [choice1A, choice1B, choice1C] = new_setup;
+            document.getElementById("A1").checked = choice1A;
+            document.getElementById("B1").checked = choice1B;
+            document.getElementById("C1").checked = choice1C;
+        }
+        // INFORMATION 2
+        function liveUpdateCheckboxInf2(new_setup) {
+            const [choice2A, choice2B, choice2C] = new_setup;
+            document.getElementById("A2").checked = choice2A;
+            document.getElementById("B2").checked = choice2B;
+            document.getElementById("C2").checked = choice2C;
+        }
+        // INFORMATION 3
+        function liveUpdateCheckboxInf3(new_setup) {
+            const [choice3A, choice3B, choice3C] = new_setup;
+            document.getElementById("A3").checked = choice3A;
+            document.getElementById("B3").checked = choice3B;
+            document.getElementById("C3").checked = choice3C;
+        }
+        // INFORMATION 4
+        function liveUpdateCheckboxInf4(new_setup) {
+            const [choice4A, choice4B, choice4C] = new_setup;
+            document.getElementById("A4").checked = choice4A;
+            document.getElementById("B4").checked = choice4B;
+            document.getElementById("C4").checked = choice4C;
+        }
+        // INFORMATION 5
+        function liveUpdateCheckboxInf5(new_setup) {
+            const [choice5A, choice5B, choice5C] = new_setup;
+            document.getElementById("A5").checked = choice5A;
+            document.getElementById("B5").checked = choice5B;
+            document.getElementById("C5").checked = choice5C;
+        }
+        // INFORMATION 6
+        function liveUpdateCheckboxInf6(new_setup) {
+            const [choice6A, choice6B, choice6C] = new_setup;
+            document.getElementById("A6").checked = choice6A;
+            document.getElementById("B6").checked = choice6B;
+            document.getElementById("C6").checked = choice6C;
+        }
+
+
+        // Agreement button: send information to oTree if player1 agrees
+        {% if player.id_in_group == 1 %}
+            function sendAgreement() {
+                liveSend({'information': 'p1_agreed'});
+            }
+       // Agreement button: send information to oTree if player2 agrees
+        {% elif player.id_in_group == 2 %}
+            function sendAgreement() {
+                liveSend({'information': 'p2_agreed'});
+            }
+         // TODO: add player 3 and 4
+        {% endif%}
+
+        // hiding the choice field if one of the players click on next
+        function lock_in() {
+            liveSend({'information': 'locked'});
+        }
+
+
+        // function receives Information from oTrees Python part
+        function liveRecv(data) {
+            // update agree_count
+            const upd_agreement = data.agreed;
+            document.getElementById("display_agree_count").textContent = upd_agreement;
+
+            // update checkboxes
+            // INFORMATION 1
+            if  (data.checkbox_update == "choice_A1_selected") {
+                liveUpdateCheckboxInf1([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B1_selected") {
+                liveUpdateCheckboxInf1([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C1_selected") {
+                liveUpdateCheckboxInf1([false, false, true]);
+            }
+            // INFORMATION 2
+            if  (data.checkbox_update == "choice_A2_selected") {
+                liveUpdateCheckboxInf2([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B2_selected") {
+                liveUpdateCheckboxInf2([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C2_selected") {
+                liveUpdateCheckboxInf2([false, false, true]);
+            }
+            // INFORMATION 3
+            if  (data.checkbox_update == "choice_A3_selected") {
+                liveUpdateCheckboxInf3([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B3_selected") {
+                liveUpdateCheckboxInf3([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C3_selected") {
+                liveUpdateCheckboxInf3([false, false, true]);
+            }
+            // INFORMATION 4
+            if  (data.checkbox_update == "choice_A4_selected") {
+                liveUpdateCheckboxInf4([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B4_selected") {
+                liveUpdateCheckboxInf4([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C4_selected") {
+                liveUpdateCheckboxInf4([false, false, true]);
+            }
+            // INFORMATION 5
+            if  (data.checkbox_update == "choice_A5_selected") {
+                liveUpdateCheckboxInf5([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B5_selected") {
+                liveUpdateCheckboxInf5([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C5_selected") {
+                liveUpdateCheckboxInf5([false, false, true]);
+            }
+            // INFORMATION 6
+            if  (data.checkbox_update == "choice_A6_selected") {
+                liveUpdateCheckboxInf6([true, false, false]);
+            }
+            if  (data.checkbox_update == "choice_B6_selected") {
+                liveUpdateCheckboxInf6([false, true, false]);
+            }
+            if  (data.checkbox_update == "choice_C6_selected") {
+                liveUpdateCheckboxInf6([false, false, true]);
+            }
+
+            // Make sure that the lock in button is just displayed, if there is agreement
+            if (data.finished) { //old: data.finished
+                document.getElementById("display_lock_button").style.display = "inline-block";
+                document.getElementById("agree_button").style.display = "none";
+            }
+            if (data.finished == false) { //old: (data.finished == false); new:data.agreed != "2"
+                document.getElementById("display_lock_button").style.display = "none";
+                document.getElementById("agree_button").style.display = "inline-block";
+            }
+            // hide checkboxes and show next button for all players if locked button is clicked by any player
+            if (data.locked == true) {
+                document.getElementById("choice_done").style.display = "block";
+                document.getElementById("choice").style.display = "none";
+                document.getElementById("display_next_button").style.display = "block";
+            }
+
+
+        }
+    </script>
+
+
+    <!--Script for Jitsi Meeting -->
+    <!-- Version from 2024-04-03 Anuja's Weakest Link Game -->
+    <script>
+        const domain = "meet.jit.si"; //Here goes your domain where the meeting takes place.
+        var isStreamOn = false; //This is a variable I've defined to use later.
+        const options = {
+            roomName: "Weakest Link Game", //This is the name of the room.
+            width: 840,                //Well, you know.
+            height: 480,                //Same as above, just vertical.
+            parentNode: document.querySelector('#meet'), //Now, you declare here which element should parent your stream.
+            configOverwrite: {}, //You can turn on or off config elements with this prop.
+            interfaceConfigOverwrite: { TOOLBAR_BUTTONS: [] },  //You can turn on or off interface elements with this prop. check https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe for details
+            jwt: 'yourtokenhere' //Here, you should pass a JWT token for authorization purposes. If you're using jitsi-token-moderation or simiar, make sure the token you pass can start streams
+        }
+        const api = new JitsiMeetExternalAPI(domain, options); //This is where the iframe is actually constructed
+        //The function below turns on the Tile View everytime a participant joins. Practically it makes Tile View the default mode
+        api.addEventListener(`videoConferenceJoined`, () => {
+            const listener = ({ enabled }) => {
+                api.removeEventListener(`tileViewChanged`, listener);
+
+                if (!enabled) {
+                    api.executeCommand(`toggleTileView`);
+                }
+            };
+        });
+
+
+
+        function streamHandler() {
+            try {
+                if (!isStreamOn) {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Starting streaming...";
+                    //The function below starts the stream or recording, according to its "mode"
+                    api.executeCommand('startRecording', {
+                        mode: 'stream', //recording mode, either `file` or `stream`.
+                        rtmpStreamKey: '', //This where you *should* put your favoured rtmp stream server along with your key, like "rtmp:\/\/some.address/norecord/stream-key"
+                        youtubeStreamKey: 'rtmp:\/\/some.address/norecord/stream-key', //the youtube stream key.
+                    });
+                } else {
+                    document.getElementById("streamingResponseMsg").innerHTML = "Stopping streaming...";
+                    //The function below stops the stream or recording, according to the string you pass. Official guide shows an object, while it should be a string
+                    api.executeCommand('stopRecording', 'stream');
+                }
+
+            }
+            catch (e){
+                if (isStreamOn){
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while stopping stream.";
+                    console.log("Exception while stopping stream.", e);
+                }else{
+                    document.getElementById("streamingResponseMsg").innerHTML = "Error while starting stream.";
+                    console.log("Exception while starting stream.", e);
+
+                }
+                this.isStreamOn = false;
+             }
+        };
+            //This part doesn't work without making some changes to the code as per this; https://github.com/team-ai-repo/jitsi-meet/pull/4/files
+            api.addEventListener("recordingStarted", () => {
+                document.getElementById("stream-btn").innerHTML="Stop Streaming";
+                document.getElementById("streamingResponseMsg").innerHTML = "Stream is on";
+                this.isStreamOn = true;
+                console.log("Example Stream On", this.isStreamOn);
+            });
+
+            api.addEventListener("recordingStopped", () => {
+            document.getElementById("stream-btn").innerHTML="Start Streaming";
+            document.getElementById("streamingResponseMsg").innerHTML = "Stream is off";
+            console.log("Example Stream Off", this.isStreamOn);
+            this.isStreamOn = false;
+        });
+
+
+    </script>
+
+{{ endblock }}
